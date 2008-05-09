@@ -1,0 +1,9 @@
+#jSocket Introduction
+
+= jSocket Introduction =
+
+jSocket is library that allows you to access sockets in Javascript. It uses the XMLSocket functionality in Action Script for the actual connection. The library is designed to be Object Oriented and therefor it possible to have more then one socket on a page.
+
+
+
+Currently fully supports Firefox and Opera.
