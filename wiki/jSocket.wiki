@@ -6,4 +6,4 @@ jSocket is library that allows you to access sockets in Javascript. It uses the 
 
 
 
-Currently fully supports Firefox and Opera.
+Currently fully supports Internet Explorer, Firefox, Opera and Safari.
