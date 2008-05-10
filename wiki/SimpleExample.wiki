@@ -1,7 +1,7 @@
 #summary Simple jSocket Example
 = Simple Example =
 
-Include the necesary javascript files
+Include the necesary javascript files:
 {{{
 <head>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
@@ -13,7 +13,7 @@ Note:
   * Using "http://code.jquery.com/jquery-latest.js" for development purposes is ok, but you really should download a jQuery release to your own webserver.
 
   
-The actual script
+The actual script:
 {{{
 <body>
 	<div id="socket"></div>
