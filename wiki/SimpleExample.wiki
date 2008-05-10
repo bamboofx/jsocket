@@ -1,0 +1,11 @@
+#summary Simple jSocket Example
+= Introduction =
+
+
+`
+<body>
+<div id="socket"></div>
+
+
+</body>
+`
