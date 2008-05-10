@@ -26,9 +26,15 @@ Call this method to close the socket connection. It's important to know that thi
 ==Events==
 
 ===jSocket.onReady()===
+Called by the socket when socket is ready for use.
 
 ===jSocket.onConnect(success)===
+Called by the socket when socket has finished connecting.
+success will either be true when the connection is estabilished or false when it failed.
 
 ===jSocket.onData(data)===
+Called by the socket when socket has has received data.
+data will contain the received data.
 
 ===jSocket.onClose()===
+Called by the socket when socket has been closed on the other side.
