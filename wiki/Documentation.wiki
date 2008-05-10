@@ -1,3 +1,4 @@
+#labels documentation,jSocket
 =jSocket Object=
 
 ==Constructor==
@@ -10,14 +11,16 @@ Internal id registration takes place here.
 ==Methods==
 
 ===jSocket.setup(target)===
-Call this method to setup the socket.
-setup takes the required parameter target, which should contain a [http://docs.jquery.com/Selectors jQuery Selector] that points to a container where jSocket will place the flash file in.
+Call this method to setup the socket. [jSocket.setup] takes the required argument target, which should contain a [http://docs.jquery.com/Selectors jQuery Selector] that points to a container where jSocket will place the flash file in. After the DOM has updated and the flash file has loaded, it will fire [jSocket.onReady].
 
 ===jSocket.connect(host, port)===
+Call this method to connect to a listening socket. Method takes two required arguments, host which should be a host name or a valid ip address to connect to, and port to indicate which port we are connecting on. Once the connection process has finished it will fire [jSocket.onConnect].
 
 ===jSocket.send(data)===
+Call this method to send data over the socket connection. Method takes one required argument, which should contain the data that will be sent over the connection.
 
 ===jSocket.close()===
+Call this method to close the socket connection. It's important to know that this will *not* trigger the [jSocket.onClose] event
 
 
 ==Events
@@ -29,6 +32,4 @@ setup takes the required parameter target, which should contain a [http://docs.j
 ===jSocket.onData(data)===
 
 ===jSocket.onClose()===
-
-
 
