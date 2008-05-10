@@ -16,7 +16,7 @@ Note:
 The actual script:
 {{{
 <body>
-	<div id='socket'></div>
+	<div></div>
 	
 	<script type='text/javascript'>
 	// Host we are connecting to
