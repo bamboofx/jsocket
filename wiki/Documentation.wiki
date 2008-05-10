@@ -1,0 +1,34 @@
+=jSocket Object=
+
+==Constructor==
+
+=== jSocket() ===
+Contructor of our jSocket Object. 
+Internal id registration takes place here.
+
+
+==Methods==
+
+===jSocket.setup(target)===
+Call this method to setup the socket.
+setup takes the required parameter target, which should contain a [http://docs.jquery.com/Selectors jQuery Selector] that points to a container where jSocket will place the flash file in.
+
+===jSocket.connect(host, port)===
+
+===jSocket.send(data)===
+
+===jSocket.close()===
+
+
+==Events
+
+===jSocket.onReady()===
+
+===jSocket.onConnect(success)===
+
+===jSocket.onData(data)===
+
+===jSocket.onClose()===
+
+
+
