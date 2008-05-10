@@ -1,0 +1,2 @@
+#labels security,jSocket,server
+Server side socket security enforced by flash do apply.
