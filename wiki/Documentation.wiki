@@ -1,4 +1,4 @@
-#labels documentation,jSocket
+#labels documentation,jSocket,Featured,Phase-Implementation
 =jSocket Object=
 
 ==Constructor==
@@ -23,7 +23,7 @@ Call this method to send data over the socket connection. Method takes one requi
 Call this method to close the socket connection. It's important to know that this will *not* trigger the [jSocket.onClose] event
 
 
-==Events
+==Events==
 
 ===jSocket.onReady()===
 
@@ -32,4 +32,3 @@ Call this method to close the socket connection. It's important to know that thi
 ===jSocket.onData(data)===
 
 ===jSocket.onClose()===
-
