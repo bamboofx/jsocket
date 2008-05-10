@@ -1,2 +1,6 @@
-#labels security,jSocket,server
+#summary Socket Security for flash
+#labels security,jSocket,server,Featured,Phase-Deploy
+
+=Socket Security=
+
 Server side socket security enforced by flash do apply.
