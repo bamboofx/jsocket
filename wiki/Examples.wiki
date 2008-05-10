@@ -1,3 +1,4 @@
 #summary jSocket Examples
+#labels jSocket,Featured,Phase-Implementation
 
 = Examples =
