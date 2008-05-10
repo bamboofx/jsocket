@@ -2,3 +2,5 @@
 #labels jSocket,Featured,Phase-Implementation
 
 = Examples =
+
+  * [SimpleExample Simple Example]
