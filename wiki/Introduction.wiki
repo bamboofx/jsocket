@@ -10,8 +10,8 @@ This project has been released with the [http://www.opensource.org/licenses/mit-
 
 = Requirements =
 
-* [http://jQuery.com jQuery]
-* A browser that has a flash player version 8+.
+  * [http://jQuery.com jQuery]
+  * A browser that has a flash player version 8+.
 
 
 = Browser Compatibility =
