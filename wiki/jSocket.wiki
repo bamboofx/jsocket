@@ -1,5 +1,5 @@
 #summary jSocket Introduction
-#labels jSocket
+#labels jSocket,Featured,Phase-Deploy
 
 = jSocket Introduction =
 
