@@ -8,7 +8,6 @@
 
 = Flash =
 
-Server side socket security enforced by flash do apply.
 Flash has some pretty aggressive socket permission systems.
 All these systems take place server side and thus not in the scope of this project.
 That said, i do provide you with an example policy file:
