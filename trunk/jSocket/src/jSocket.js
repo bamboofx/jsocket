@@ -26,24 +26,19 @@
 var jSocketContainer = [];
 
 // jSocket Constructor
-function jSocket()
-{    
+function jSocket(){    
     // Random id to identify the socket
-    while(true)
-    {
+    while(true){
         this.id = "jSocket_"+Math.round(Math.random()*10000);
-        try
-        {
+        try{
             // Should throw an exception if it can't find the id in the container
-            jSocket_GetSocket(this.id); 
-        
-        }catch(e)
-        {
+            jSocket_GetSocket(this.id);         
+        }
+        catch(e){
             // We found an unused id
-            break;        
-        }            
-    }
-    
+            break;
+        }
+    }    
     // Put the jSocket in the container
     jSocketContainer.push({id: this.id, socket:this});     
     
@@ -54,19 +49,15 @@ function jSocket()
 }
 
 // Find the Swf object
-jSocket.prototype.findSwf = function()
-{
-    if (window.document[this.id]) 
-    {
+jSocket.prototype.findSwf = function(){
+    if (window.document[this.id]){
         return window.document[this.id];
     }
-    if (!$.browser.msi)
-    {
+    if (!$.browser.msi){
         if (document.embeds && document.embeds[this.id])
         return document.embeds[this.id]; 
     }
-    else
-    {
+    else{
         return $("#"+this.id)[0];
     }
 }
@@ -85,8 +76,7 @@ jSocket.prototype.setup = function(target)
 // Connect to a listening socket
 // host: hostname/ip to connect to
 // port: tcp/ip port to connect on
-jSocket.prototype.connect = function(host,port)
-{   
+jSocket.prototype.connect = function(host,port){
      var m = this.movie;
      m.SetVariable("host", host);
      m.SetVariable("port", port);
@@ -95,33 +85,27 @@ jSocket.prototype.connect = function(host,port)
 
 // Send data over the socket connection
 // data: data to send 
-jSocket.prototype.send = function(data)
-{
+jSocket.prototype.send = function(data){
     var m = this.movie;
     m.SetVariable("data", data);
     m.TCallLabel("/", "send" )
 }
 
 //  Close the socket connection
-jSocket.prototype.close = function()
-{    
+jSocket.prototype.close = function(){
     this.movie.TCallLabel("/", "close" );    
 }
 
 // Find a socket by id in the jSocketContainer
 // id: socket id
-function jSocket_GetSocket(id)
-{
+function jSocket_GetSocket(id){
     var socket;
     $.each(jSocketContainer,function()
     {
-    
-        if(this.id==id)
-        {
+        if(this.id==id){
             socket = this.socket;
             return false;
-        }
-    
+        }    
     });
     if(socket)
         return socket;
@@ -132,30 +116,29 @@ function jSocket_GetSocket(id)
 
 // Callback for the flash object to signal the flash file is loaded
 // triggers jSocket.onReady
-function jSocket_Init(id)
-{    
-    var socket = jSocket_GetSocket(id);    
-        
+function jSocket_Init(id){
+    var socket = jSocket_GetSocket(id);
     var v = socket.variableTest;
     // Wait until we can actually set Variables in flash
     var f = function(){
+        var err = true;
 	    try{
 	        // Needs to be in the loop, early results might fail, when DOM hasn't updated yet
-	        var m = socket.findSwf(); 
+	        var m = socket.findSwf();
             m.SetVariable(v, 't');
             if('t' != m.GetVariable(v))
                 throw null;
-            m.SetVariable(v, '');            
-            
-            
+            m.SetVariable(v, '');
             // Store the found movie for later use
             socket.movie = m; 
-            // Fire the event
-            if(socket.onReady) 
-                socket.onReady();          
-                
-  
-        }catch(e){ window.setTimeout(f,0);}
+            err=false;
+        }
+        catch(e){ 
+            window.setTimeout(f,0);
+        }
+        // Fire the event
+        if(!err&&socket.onReady)
+            socket.onReady();
     }
     window.setTimeout(f,0);
 }
@@ -163,21 +146,17 @@ function jSocket_Init(id)
 // Callback for the flash object to signal data is received
 // triggers jSocket.onData
 function jSocket_Data(id, data){
- 
     var socket = jSocket_GetSocket(id);
     if(socket.onData)
         socket.onData(data);
-    
 }
 
 // Callback for the flash object to signal the connection attempt is finished
 // triggers jSocket.onConnect
 function jSocket_Connect(id, success){
- 
     var socket = jSocket_GetSocket(id);
     if(socket.onConnect)
-        socket.onConnect(success); 
- 
+        socket.onConnect(success);
 }
 
 // Callback for the flash object to signal the connection was closed from the other end
