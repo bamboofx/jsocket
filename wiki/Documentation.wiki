@@ -1,5 +1,5 @@
 #summary jSocket Documentation
-#labels documentation,jSocket,Featured,Phase-Implementation
+#labels documentation,Phase-Implementation,Featured
 =jSocket Object=
 
 ==Constructor==
