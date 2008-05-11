@@ -1,3 +1,4 @@
+#summary jSocket Documentation
 #labels documentation,jSocket,Featured,Phase-Implementation
 =jSocket Object=
 
