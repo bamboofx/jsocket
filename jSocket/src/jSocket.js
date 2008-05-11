@@ -26,7 +26,7 @@
 var jSocketContainer = [];
 
 // jSocket Constructor
-function jSocket(){    
+function jSocket(){
     // Random id to identify the socket
     while(true){
         this.id = "jSocket_"+Math.round(Math.random()*10000);
@@ -45,7 +45,9 @@ function jSocket(){
     // Unused variable name used in flash for testing
     // Should use jSocket.variableTest = 'whatever' 
     // If you are using a variable 'xt' in your flashmovie
-    this.variableTest ='xt';   
+    this.variableTest ='xt';     
+    // Connection state
+    this.connected = false;  
 }
 
 // Find the Swf object
@@ -76,24 +78,27 @@ jSocket.prototype.setup = function(target)
 // Connect to a listening socket
 // host: hostname/ip to connect to
 // port: tcp/ip port to connect on
-jSocket.prototype.connect = function(host,port){
-     var m = this.movie;
-     m.SetVariable("host", host);
-     m.SetVariable("port", port);
-     m.TCallLabel("/", "connect" );
+jSocket.prototype.connect = function(host,port){    
+    if(!this.movie)
+        throw "jSocket isn't ready yet, use the onReady event";
+    if(this.connected)
+        this.movie.close();
+    this.movie.connect(host, port);     
 }
 
 // Send data over the socket connection
 // data: data to send 
 jSocket.prototype.send = function(data){
-    var m = this.movie;
-    m.SetVariable("data", data);
-    m.TCallLabel("/", "send" )
+    if(!this.connected||!this.movie)
+        throw "jSocket is not connected, use the onConnect event ";
+    return this.movie.send(data);
 }
 
 //  Close the socket connection
 jSocket.prototype.close = function(){
-    this.movie.TCallLabel("/", "close" );    
+    this.connected = false;
+    if(this.movie)
+        this.movie.close();    
 }
 
 // Find a socket by id in the jSocketContainer
@@ -109,7 +114,6 @@ function jSocket_GetSocket(id){
     });
     if(socket)
         return socket;
-        
     // Exception is used in the constructor
     throw "jSocket '"+id+"' not found in jSocketContainer";
 }
@@ -155,6 +159,8 @@ function jSocket_Data(id, data){
 // triggers jSocket.onConnect
 function jSocket_Connect(id, success){
     var socket = jSocket_GetSocket(id);
+    if(success)
+        socket.connected = true;
     if(socket.onConnect)
         socket.onConnect(success);
 }
@@ -163,6 +169,7 @@ function jSocket_Connect(id, success){
 // triggers jSocket.onClose
 function jSocket_Close(id){
     var socket = jSocket_GetSocket(id);
+    socket.connected = false;
     if(socket.onClose)
         socket.onClose();
 }
