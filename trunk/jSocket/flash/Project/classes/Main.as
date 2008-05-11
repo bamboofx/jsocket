@@ -1,16 +1,13 @@
 import flash.external.ExternalInterface;
 class Main{
 	var s;
-	var id;
-	
+	var id;	
 	function connect(host,port){
 		if(s){
 			s.close();
 			delete s;
-		}
-		
-		s = new XMLSocket();
-		
+		}		
+		s = new XMLSocket();		
 		var me= this;
 		s.onConnect = function(success){			
 			ExternalInterface.call("jSocket_Connect",me.id,success);			
@@ -23,26 +20,22 @@ class Main{
 		}
 		if(!s.connect(host,port)){
 			ExternalInterface.call("jSocket_Connect",id,false);			
-		}
-	
+		}	
 	}
 	function send(data){	
 		return s.send(data);
 	}	
-	
 	function close(){
 		s.close();
 		delete s;		
-	}
-	
+	}	
 	function Main(){
 		ExternalInterface.addCallback("connect", this, connect);
 		ExternalInterface.addCallback("send", this, send); 
 		ExternalInterface.addCallback("close", this, close);		
 		id = _root._url.substring(_root._url.lastIndexOf("?")+1,_root._url.length);		
 		ExternalInterface.call("jSocket_Init",id);		
-	}
-	
+	}	
 	static function main(){
 		var m = new Main();		
 	}
