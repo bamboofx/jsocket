@@ -1,5 +1,5 @@
 #summary Socket Security for flash
-#labels security,jSocket,server,Featured,Phase-Deploy
+#labels security,server,Featured,Phase-Deploy
 
 =Security=
 
