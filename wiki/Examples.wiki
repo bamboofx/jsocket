@@ -1,5 +1,5 @@
 #summary jSocket Examples
-#labels jSocket,Featured,Phase-Implementation
+#labels Featured,Phase-Implementation
 
 = Examples =
 
