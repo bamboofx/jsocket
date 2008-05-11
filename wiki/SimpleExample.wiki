@@ -1,4 +1,5 @@
 #summary Simple jSocket Example
+#labels Phase-Implementation,example
 = Simple Example =
 
 Include the necesary javascript files:
