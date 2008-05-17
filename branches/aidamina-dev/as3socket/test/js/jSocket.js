@@ -149,7 +149,7 @@ function jSocket_Init(id){
 
 // Callback for the flash object to signal data is received
 // triggers jSocket.onData
-function jSocket_Data(id, data){
+function jSocket_onData(id, data){
     var socket = jSocket_GetSocket(id);
     if(socket.onData)
         socket.onData(data);
@@ -157,17 +157,23 @@ function jSocket_Data(id, data){
 
 // Callback for the flash object to signal the connection attempt is finished
 // triggers jSocket.onConnect
-function jSocket_Connect(id, success){
-    var socket = jSocket_GetSocket(id);
-    if(success)
-        socket.connected = true;
+function jSocket_onConnect(id){
+    socket.connected = true;
     if(socket.onConnect)
-        socket.onConnect(success);
+        socket.onConnect(true);
+}
+
+// Callback for the flash object to signal the connection attempt is finished
+// triggers jSocket.onConnect
+function jSocket_onError(id, error){
+    var socket = jSocket_GetSocket(id);
+    if(socket.onConnect)
+        socket.onConnect(false);
 }
 
 // Callback for the flash object to signal the connection was closed from the other end
 // triggers jSocket.onClose
-function jSocket_Close(id){
+function jSocket_onClose(id){
     var socket = jSocket_GetSocket(id);
     socket.connected = false;
     if(socket.onClose)
