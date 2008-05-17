@@ -36,10 +36,8 @@
     
     }
     
-    alert('loading');
     xlms.onReady = function()
     {            
-        alert('ready');
         xlms.connect("aidamina.no-ip.org",3000);
         
     }   
@@ -52,6 +50,7 @@
         $("#send").click(function()
         {
             xlms.writeInt(1337);
+            xlms.flush();
             //xlms.send($("#text").val());        
         
         });
