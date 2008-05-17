@@ -20,6 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 package 
 {
 	import flash.display.Sprite;
@@ -35,8 +36,7 @@ package
 			var url:String = root.loaderInfo.url;
 			var id:String = url.substring(url.lastIndexOf("?") + 1, url.length);
 			
-			var socket:jSocket = new jSocket(id);	
-			
+			var socket:jSocket = new jSocket(id);			
 			
 		}
 	}
