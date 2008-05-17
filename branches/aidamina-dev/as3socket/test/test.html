@@ -4,7 +4,9 @@
     <title>Untitled Page</title>
     <script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
     <script type="text/javascript" src="js/jSocket.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
 
+    
 </head>
 <body>
 <div id="engine1" ></div>
@@ -37,8 +39,11 @@
     }
     
     xlms.onReady = function()
-    {            
+    {   
+    
+        alert(JSON.stringify(xlms.movie.test()));         
         xlms.connect("aidamina.no-ip.org",3000);
+        
         
     }   
     xlms.setup("#engine1");

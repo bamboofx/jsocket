@@ -10,12 +10,20 @@
 		private var socket:Socket;
 		private var id:String;
 		
-		public function trace(data):void
+		private function trace(data):void
 		{
 			Javascript.trace(data);
 			
 			
 		}
+		
+		private function add(name:String, f:Function):void
+		{
+			ExternalInterface.addCallback(name, f);
+			
+			
+		}
+		
 		public function jSocket(id:String) 
 		{
 			this.id = id;
@@ -26,23 +34,29 @@
 			socket.addEventListener("securityError", onSecurityError);
 			socket.addEventListener("socketData", onData);
 			
-			ExternalInterface.addCallback("connect", this.connect);
-			ExternalInterface.addCallback("close", this.close);
-			ExternalInterface.addCallback("flush", this.flush);
+			add("connect", connect);
+			add("close", close);
+			add("flush", flush);
 			
 			//Int
-			ExternalInterface.addCallback("writeInt", this.writeInt);
-			ExternalInterface.addCallback("readInt", this.writeInt);
+			add("writeInt", writeInt);
+			add("readInt", writeInt);
 			
 			//Uint
-			ExternalInterface.addCallback("writeUnsignedInt", this.writeUnsignedInt);
-			ExternalInterface.addCallback("readUnsignedInt", this.readUnsignedInt);
+			add("writeUnsignedInt", writeUnsignedInt);
+			add("readUnsignedInt", readUnsignedInt);
 			
 			//UTF
-			ExternalInterface.addCallback("writeUTFBytes", this.writeUTFBytes);
-			ExternalInterface.addCallback("readUTFBytes", this.readUTFBytes);
-			ExternalInterface.addCallback("writeUTF", this.writeUTF);
-			ExternalInterface.addCallback("readUTF", this.readUTF);
+			add("writeUTFBytes", writeUTFBytes);
+			add("readUTFBytes", readUTFBytes);
+			add("writeUTF", writeUTF);
+			add("readUTF", readUTF);
+			
+			//AMF
+			add("writeObject", writeObject);
+			add("readObject", readObject);
+			add("setObjectEncoding", setObjectEncoding);
+			add("getObjectEncoding", getObjectEncoding);
 			
 			
 			ExternalInterface.call("jSocket_onInit",id);		
@@ -56,31 +70,7 @@
 			socket.connect(host, port);			
 			
 		}
-		
-		
-		
-		public function write(data):void
-		{
-			trace(typeof(data));
-			switch(typeof(data))
-			{
-				case int:
-					socket.writeInt(data);
-					break;
-				case String:
-					socket.writeUTFBytes(data);
-					break;
 				
-				
-				
-				
-				default: 
-					trace("default");
-				
-			}
-			
-		}
-		
 		public function close():void
 		{
 			socket.close();
@@ -91,8 +81,6 @@
 			trace("flush");	
 			socket.flush();
 		}
-		
-		
 		
 		
 		
@@ -110,6 +98,7 @@
 			ExternalInterface.call("jSocket_onError", id, event.text);
 			
 		}
+		
 		private function onSecurityError(event:SecurityErrorEvent):void
 		{
 			
@@ -137,7 +126,8 @@
 		// Int
 		public function writeInt(data:int):void
 		{			
-			socket.writeInt(data);			
+			socket.writeInt(data);
+			
 		}
 		
 		public function readInt():int
@@ -154,8 +144,7 @@
 		public function readUnsignedInt():uint
 		{
 			return socket.readUnsignedInt();	
-		}
-		
+		}		
 		
 		//UTF		
 		public function writeUTFBytes(data:String):void
@@ -182,9 +171,31 @@
 					
 		}
 		
-		
+		//AMF
 
+		public function writeObject(data:Object):void
+		{			
+			socket.writeObject(data)
+					
+		}		
 		
+		public function readObject():Object
+		{			
+			return socket.readObject();
+					
+		}
+		
+		public function setObjectEncoding(data:uint):void
+		{			
+			socket.objectEncoding = data
+					
+		}		
+		
+		public function getObjectEncoding():uint
+		{			
+			return socket.objectEncoding;
+					
+		}
 		
 		
 	}
