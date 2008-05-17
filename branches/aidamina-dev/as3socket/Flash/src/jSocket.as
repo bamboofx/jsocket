@@ -20,6 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 package  
 {
 	
@@ -29,21 +30,18 @@ package
 		import flash.external.ExternalInterface;
 		import flash.events.*;
 		import flash.net.*;
+		import flash.utils.ByteArray;
 		private var socket:Socket;
 		private var id:String;
 		
 		private function trace(data):void
 		{
-			Javascript.trace(data);
-			
-			
+			Javascript.trace(data);		
 		}
 		
 		private function add(name:String, f:Function):void
 		{
 			ExternalInterface.addCallback(name, f);
-			
-			
 		}
 		
 		public function jSocket(id:String) 
@@ -58,22 +56,41 @@ package
 			
 			add("connect", connect);
 			add("close", close);
-			add("flush", flush);
+			add("flush", flush);			
+			
+			// Boolean
+			add("writeBoolean", writeBoolean);
+			add("readBoolean", readBoolean);
+			
+			// Byte
+			add("writeByte", writeByte);
+			add("readByte", writeByte);
+			add("writeBytes", writeBytes);
+			add("readBytes", readBytes);
 			
 			// Short
 			add("writeShort", writeShort);
-			add("readShort", writeShort);
+			add("readShort", readShort);
 			
 			// Int
 			add("writeInt", writeInt);
-			add("readInt", writeInt);
+			add("readInt", readInt);
 			
 			// Uint
 			add("writeUnsignedInt", writeUnsignedInt);
 			add("readUnsignedInt", readUnsignedInt);
 			
 			// Float
+			add("writeFloat", writeFloat);
+			add("readFloat", readFloat);
 			
+			// Double
+			add("writeDouble", writeDouble);
+			add("readDouble", readDouble);
+			
+			// MultiByte
+			add("writeMultiByte", writeMultiByte);
+			add("readMultiByte", readMultiByte);
 			
 			// UTF
 			add("writeUTFBytes", writeUTFBytes);
@@ -87,136 +104,178 @@ package
 			add("setObjectEncoding", setObjectEncoding);
 			add("getObjectEncoding", getObjectEncoding);
 			
-			
-			
 			ExternalInterface.call("jSocket_onInit",id);		
 
 		}	
-				
-	
 		
 		public function connect(host:String, port:int):void
 		{			
 			socket.connect(host, port);			
-			
 		}
-				
+		
 		public function close():void
 		{
 			socket.close();
 		}
+		
 		public function flush():void
 		{
 			socket.flush();
 		}
 		
-		
-		
 		private function onConnect(event:Event):void
 		{
 			trace("jSocket_onConnect ("+id+")");
-			ExternalInterface.call("jSocket_onConnect", id);
-			
+			ExternalInterface.call("jSocket_onConnect", id);			
 		}
 		
 		private function onError(event:IOErrorEvent):void
 		{
-			
 			trace("jSocket_onError ("+id+", '"+event.text+"')");
-			ExternalInterface.call("jSocket_onError", id, event.text);
-			
+			ExternalInterface.call("jSocket_onError", id, event.text);			
 		}
 		
 		private function onSecurityError(event:SecurityErrorEvent):void
-		{
-			
+		{			
 			trace("jSocket_onError ("+id+", '"+event.text+"')");
-			ExternalInterface.call("jSocket_onError", id, event.text);
-			
+			ExternalInterface.call("jSocket_onError", id, event.text);			
 		}		
 		
 		private function onClose(event:Event):void
-		{
-			
+		{			
 			trace("jSocket_onClose ("+id+")");
-			ExternalInterface.call("jSocket_onClose", id);
-			
+			ExternalInterface.call("jSocket_onClose", id);			
 		}
 		
 		private function onData(event:ProgressEvent):void
-		{
-			
+		{			
 			trace("jSocket_onData ("+id+", '"+event.bytesLoaded+"')");
-			ExternalInterface.call("jSocket_onData", id, event.bytesLoaded);
-			
+			ExternalInterface.call("jSocket_onData", id, event.bytesLoaded);			
+		}
+		
+		// Boolean
+		public function writeBoolean(data:Boolean):void
+		{			
+			socket.writeBoolean(data);			
+		}
+		
+		public function readBoolean():Boolean
+		{
+			return socket.readBoolean();
+		}		
+		
+		// Byte
+		public function writeByte(data:int):void
+		{			
+			socket.writeByte(data);			
+		}
+		
+		public function readByte():int
+		{
+			return socket.readByte();
+		}
+		
+		public function writeBytes(bytes:ByteArray, offset:uint, length:uint):void
+		{			
+			socket.writeBytes(bytes, offset, length);			
+		}
+		
+		public function readBytes(bytes:ByteArray, offset:uint, length:uint):void
+		{
+			socket.readBytes(bytes, offset, length);
 		}
 		
 		// Short
 		public function writeShort(data:int):void
 		{			
-			socket.writeShort(data);
-			
+			socket.writeShort(data);			
 		}
 		
 		public function readShort():int
 		{
-			return socket.readShort();	
+			return socket.readShort();
 		}
 		
 		// Int
 		public function writeInt(data:int):void
 		{			
-			socket.writeInt(data);
-			
+			socket.writeInt(data);			
 		}
 		
 		public function readInt():int
 		{
-			return socket.readInt();	
+			return socket.readInt();
 		}
 		
 		// Uint
 		public function writeUnsignedInt(data:uint):void
 		{
-			socket.writeUnsignedInt(data);			
+			socket.writeUnsignedInt(data);
 		}		
 		
 		public function readUnsignedInt():uint
 		{
-			return socket.readUnsignedInt();	
-		}		
+			return socket.readUnsignedInt();
+		}
+		
+		// Float
+		public function writeFloat(data:Number):void
+		{			
+			socket.writeFloat(data);
+		}
+		
+		public function readFloat():Number
+		{
+			return socket.readFloat();
+		}
+		
+		// Double
+		public function writeDouble(data:Number):void
+		{			
+			socket.writeInt(data);			
+		}
+		
+		public function readDouble():Number
+		{
+			return socket.readDouble();
+		}
+		
+		// MultiByte		
+		public function writeMultiByte	(value:String, charSet:String):void
+		{			
+			socket.writeMultiByte(value, charSet);
+		}
+		
+		public function readMultiByte(length:uint,charSet:String):String
+		{
+			return socket.readMultiByte(length, charSet);
+		}
 		
 		//UTF		
 		public function writeUTFBytes(data:String):void
 		{			
-			socket.writeUTFBytes(data)
-					
+			socket.writeUTFBytes(data);
 		}		
 		
 		public function readUTFBytes(length:int):String
 		{			
-			return socket.readUTFBytes(length);
-					
+			return socket.readUTFBytes(length);					
 		}
 		
 		public function writeUTF(data:String):void
 		{			
-			socket.writeUTF(data)
-					
+			socket.writeUTF(data);	
 		}		
 		
 		public function readUTF():String
 		{			
 			return socket.readUTF();
-					
 		}
 		
 		//AMF
-
 		public function writeObject(data:Object):void
 		{			
-			socket.writeObject(data)
-					
+			socket.writeObject(data);
 		}		
 		
 		public function readObject():Object
@@ -225,9 +284,9 @@ package
 					
 		}
 		
-		public function setObjectEncoding(data:uint):void
+		public function setObjectEncoding(value:uint):void
 		{			
-			socket.objectEncoding = data
+			socket.objectEncoding = value;
 					
 		}		
 		
