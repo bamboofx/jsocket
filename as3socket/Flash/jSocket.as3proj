@@ -4,7 +4,7 @@
   <output>
     <movie disabled="False" />
     <movie input="" />
-    <movie path="bin/Project1.swf" />
+    <movie path="bin/jSocket.swf" />
     <movie fps="30" />
     <movie width="800" />
     <movie height="600" />
@@ -70,7 +70,7 @@
   <!-- Executed before build -->
   <preBuildCommand />
   <!-- Executed after build -->
-  <postBuildCommand alwaysRun="False" />
+  <postBuildCommand alwaysRun="True">cmd.exe /k xcopy "$(OutputDir)\$(OutputName)" "$(ProjectDir)/../test/$(OutputName)" /E /I /D /Y</postBuildCommand>
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
