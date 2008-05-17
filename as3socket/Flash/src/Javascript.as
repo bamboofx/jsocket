@@ -30,8 +30,7 @@ package
 		
 		public static function trace(data):void
 		{
-			ExternalInterface.call("trace", data);
-			
+			ExternalInterface.call("trace", data);			
 		}
 		
 	}
