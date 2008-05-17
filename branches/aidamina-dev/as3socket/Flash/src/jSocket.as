@@ -8,22 +8,29 @@
 		import flash.events.*;
 		import flash.net.*;
 		private var socket:Socket;
-		private var id:int;
-		public function jSocket(id:int) 
+		private var id:String;
+		
+		public function trace(data):void
+		{
+			Javascript.trace(data);
+			
+			
+		}
+		public function jSocket(id:String) 
 		{
 			this.id = id;
 			socket = new Socket();
 			socket.addEventListener("close", onClose);
 			socket.addEventListener("connect", onConnect);
 			socket.addEventListener("ioError", onError);
-			socket.addEventListener("securityError", onError);
+			socket.addEventListener("securityError", onSecurityError);
 			socket.addEventListener("socketData", onData);
 			
 			ExternalInterface.addCallback("connect", this.connect);
 			ExternalInterface.addCallback("close", this.close);
 			
 			ExternalInterface.addCallback("writeInt", socket.writeInt);
-		
+			ExternalInterface.call("jSocket_onInit",id);		
 
 		}	
 				
@@ -75,25 +82,30 @@
 		
 		private function onConnect(event:Event):void
 		{
-			trace("onConnect ("+id+")");
+			trace("jSocket_onConnect ("+id+")");
 			ExternalInterface.call("jSocket_onConnect", id);
 			
-			write(id);
 		}
 		
 		private function onError(event:IOErrorEvent):void
 		{
 			
-			trace("onError ("+id+", '"+event.text+"')");
+			trace("jSocket_onError ("+id+", '"+event.text+"')");
 			ExternalInterface.call("jSocket_onError", id, event.text);
 			
 		}
-		
+		private function onSecurityError(event:SecurityErrorEvent):void
+		{
+			
+			trace("jSocket_onError ("+id+", '"+event.text+"')");
+			ExternalInterface.call("jSocket_onError", id, event.text);
+			
+		}		
 		
 		private function onClose(event:Event):void
 		{
 			
-			trace("onClose ("+id+")");
+			trace("jSocket_onClose ("+id+")");
 			ExternalInterface.call("jSocket_onClose", id);
 			
 		}
@@ -101,12 +113,10 @@
 		private function onData(event:DataEvent):void
 		{
 			
-			trace("onData ("+id+", '"+event.text+"')");
+			trace("jSocket_onData ("+id+", '"+event.text+"')");
 			ExternalInterface.call("jSocket_onData", id, event.text);
 			
 		}
-		
-
 		
 	}
 	

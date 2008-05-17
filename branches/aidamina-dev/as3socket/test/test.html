@@ -13,18 +13,17 @@
 
 <script type="text/javascript">
     var xlms = new jSocket();
-    function Debug(data)
+    function trace(data)
     {
-        alert(data);
+        alert("Flash Trace: "+data);
     
     }
     xlms.onConnect = function(success)
     {
-        alert(success);   
         
         if(success)
         {
-            xlms.send("Ik wil graag wat hebben plx!!!");
+            //xlms.send("Ik wil graag wat hebben plx!!!");
             
         
         } 
@@ -37,9 +36,9 @@
     
     }
     
-  
+    alert('loading');
     xlms.onReady = function()
-    {
+    {            
         alert('ready');
         xlms.connect("aidamina.no-ip.org",3000);
         
@@ -52,8 +51,8 @@
     {
         $("#send").click(function()
         {
-            
-            xlms.send($("#text").val());        
+            xlms.writeInt(1337);
+            //xlms.send($("#text").val());        
         
         });
     
