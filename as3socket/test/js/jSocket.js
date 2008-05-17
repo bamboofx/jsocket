@@ -89,8 +89,6 @@ jSocket.prototype.connect = function(host,port){
 // Send data over the socket connection
 // data: data to send 
 jSocket.prototype.send = function(data){
-
-    alert(this.connected+" "+this.movie);
     if(!this.connected||!this.movie)
         throw "jSocket is not connected, use the onConnect event ";
     return this.movie.send(data);
