@@ -10,6 +10,7 @@
 </head>
 <body>
 <div id="engine1" ></div>
+<div id="trace" ></div>
 <div id="content" ></div>
 
 
@@ -17,7 +18,8 @@
     var xlms = new jSocket();
     function trace(data)
     {
-        alert("Flash Trace: "+data);
+        $("#trace").append(data+"<br/>");
+        
     
     }
     xlms.onConnect = function(success)
@@ -26,7 +28,12 @@
         if(success)
         {
             //xlms.send("Ik wil graag wat hebben plx!!!");
-            
+            xlms.writeBoolean(true);
+            xlms.writeInt(1234);
+            xlms.writeFloat(0.133);
+            xlms.writeDouble(0.32234234);
+            xlms.writeUTF("Test1234");
+            xlms.writeBytes([0x01,0x02,0x03],0,3);
         
         } 
     }

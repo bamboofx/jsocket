@@ -171,7 +171,7 @@ function jSocket_onConnect(id){
 function jSocket_onError(id, error){
     var socket = jSocket_GetSocket(id);
     if(socket.onConnect)
-        socket.onConnect(false);
+        socket.onConnect(false,error);
 }
 
 // Callback for the flash object to signal the connection was closed from the other end
@@ -196,8 +196,6 @@ jSocket.prototype.checkConnected = function(){
     if(!this.connected||!this.movie)
         throw "jSocket is not connected, use the onConnect event ";
 }
-
-
 
 
 // Boolean
@@ -294,7 +292,7 @@ jSocket.prototype.readFloat = function()
 jSocket.prototype.writeDouble = function(data)
 {		
     this.checkConnected();
-	this.movie.writeInt(data);			
+	this.movie.writeDouble(data);			
 }
 
 jSocket.prototype.readDouble = function()
