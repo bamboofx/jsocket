@@ -89,6 +89,8 @@ jSocket.prototype.connect = function(host,port){
 // Send data over the socket connection
 // data: data to send 
 jSocket.prototype.send = function(data){
+
+    alert(this.connected+" "+this.movie);
     if(!this.connected||!this.movie)
         throw "jSocket is not connected, use the onConnect event ";
     return this.movie.send(data);
@@ -104,7 +106,7 @@ jSocket.prototype.close = function(){
 // Find a socket by id in the jSocketContainer
 // id: socket id
 function jSocket_GetSocket(id){
-    var socket;
+    var socket = false;
     $.each(jSocketContainer,function()
     {
         if(this.id==id){
@@ -120,8 +122,10 @@ function jSocket_GetSocket(id){
 
 // Callback for the flash object to signal the flash file is loaded
 // triggers jSocket.onReady
-function jSocket_Init(id){
+function jSocket_onInit(id){
+    
     var socket = jSocket_GetSocket(id);
+    
     var v = socket.variableTest;
     // Wait until we can actually set Variables in flash
     var f = function(){
@@ -158,6 +162,7 @@ function jSocket_onData(id, data){
 // Callback for the flash object to signal the connection attempt is finished
 // triggers jSocket.onConnect
 function jSocket_onConnect(id){
+    var socket = jSocket_GetSocket(id);
     socket.connected = true;
     if(socket.onConnect)
         socket.onConnect(true);
@@ -178,4 +183,11 @@ function jSocket_onClose(id){
     socket.connected = false;
     if(socket.onClose)
         socket.onClose();
+}
+
+jSocket.prototype.writeInt = function(data){      
+    
+    if(!this.connected||!this.movie)
+        throw "jSocket is not connected, use the onConnect event ";
+    return this.movie.writeInt(data);  
 }
