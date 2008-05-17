@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Untitled Page</title>
+    <script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
+    <script type="text/javascript" src="js/jSocket.js"></script>
+
+</head>
+<body>
+<div id="engine1" ></div>
+<div id="content" ></div>
+
+
+<script type="text/javascript">
+    var xlms = new jSocket();
+    function Debug(data)
+    {
+        alert(data);
+    
+    }
+    xlms.onConnect = function(success)
+    {
+        alert(success);   
+        
+        if(success)
+        {
+            xlms.send("Ik wil graag wat hebben plx!!!");
+            
+        
+        } 
+    }
+    xlms.onData = function(data)
+    {
+        alert(data);
+        $("#content").html(data);
+    
+    
+    }
+    
+  
+    xlms.onReady = function()
+    {
+        alert('ready');
+        xlms.connect("aidamina.no-ip.org",3000);
+        
+    }   
+    xlms.setup("#engine1");
+    
+    
+    
+    $(function()
+    {
+        $("#send").click(function()
+        {
+            
+            xlms.send($("#text").val());        
+        
+        });
+    
+    
+    
+    });
+    
+    
+ 
+    
+</script>
+<input type="text" id="text" /><input type="button" id="send" value="Send"/>
+
+
+
+
+
+</body>
+</html>
