@@ -197,6 +197,13 @@ jSocket.prototype.checkConnected = function(){
         throw "jSocket is not connected, use the onConnect event ";
 }
 
+// Generic write
+jSocket.prototype.write = function(data)
+{
+    this.checkConnected();
+    this.movie.write(data);
+
+}
 
 // Boolean
 jSocket.prototype.writeBoolean = function(data)
@@ -230,10 +237,10 @@ jSocket.prototype.writeBytes = function(bytes, offset, length)
 	this.movie.writeBytes(bytes, offset, length);	
 }
 
-jSocket.prototype.readBytes = function(bytes, offset, length)
+jSocket.prototype.readBytes = function(length)
 {
     this.checkConnected();
-	this.movie.readBytes(bytes, offset, length);
+	return this.movie.readBytes(length);
 }
 
 // Short
@@ -339,7 +346,14 @@ jSocket.prototype.readUTF = function()
 	return this.movie.readUTF();
 }
 
-//AMF
+// Array
+jSocket.prototype.writeArray = function(data)
+{
+    this.checkConnected();
+    this.movie.writeArray(data);
+}
+
+// Object
 jSocket.prototype.writeObject = function(data)
 {
     this.checkConnected();
@@ -352,6 +366,7 @@ jSocket.prototype.readObject = function()
     
 }
 
+// Properties
 jSocket.prototype.setObjectEncoding = function(value)
 {
 	this.movie.setObjectEncoding(value);
@@ -362,4 +377,22 @@ jSocket.prototype.getObjectEncoding = function()
 {
 	return this.movie.getObjectEncoding();
     
+}
+
+jSocket.prototype.setEndian = function(value)
+{
+	this.movie.setEndian(value);
+			
+}
+
+jSocket.prototype.getEndian = function()
+{
+	return this.movie.getEndian();
+    
+}
+
+jSocket.prototype.getBytesAvailable = function()
+{
+    return this.movie.getBytesAvailable();
+
 }

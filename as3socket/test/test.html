@@ -33,7 +33,8 @@
             xlms.writeFloat(0.133);
             xlms.writeDouble(0.32234234);
             xlms.writeUTF("Test1234");
-            xlms.writeBytes([0x01,0x02,0x03],0,3);
+            var arr = [0x01,0x02,0x03];
+            xlms.writeBytes(arr,0,arr.length);
         
         } 
     }
