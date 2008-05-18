@@ -28,16 +28,11 @@ package
 	{		
 		import flash.external.ExternalInterface;
 		import flash.events.*;
-		import flash.net.*;
+		import flash.net.Socket;
 		import flash.utils.ByteArray;
 		private var socket:Socket;
 		private var id:String;
-		
-		private function trace(data):void
-		{
-			Javascript.trace(data);	
-		}
-		
+				
 		private function add(name:String, f:Function):void
 		{
 			ExternalInterface.addCallback(name, f);
@@ -139,31 +134,26 @@ package
 		
 		private function onConnect(event:Event):void
 		{
-			trace("jSocket_onConnect ("+id+")");
 			ExternalInterface.call("jSocket_onConnect", id);
 		}
 		
 		private function onError(event:IOErrorEvent):void
 		{
-			trace("jSocket_onError ("+id+", '"+event.text+"')");
 			ExternalInterface.call("jSocket_onError", id, event.text);
 		}
 		
 		private function onSecurityError(event:SecurityErrorEvent):void
 		{
-			trace("jSocket_onError ("+id+", '"+event.text+"')");
 			ExternalInterface.call("jSocket_onError", id, event.text);
 		}
 		
 		private function onClose(event:Event):void
 		{
-			trace("jSocket_onClose ("+id+")");
 			ExternalInterface.call("jSocket_onClose", id);
 		}
 		
 		private function onData(event:ProgressEvent):void
 		{
-			trace("jSocket_onData ("+id+", '"+event.bytesLoaded+"')");
 			ExternalInterface.call("jSocket_onData", id, event.bytesLoaded);
 		}
 		
@@ -202,8 +192,7 @@ package
 				
 				default:
 				throw "Unknown type";				
-			}
-			
+			}			
 		}
 		
 		
@@ -345,12 +334,8 @@ package
 		// Array
 		public function writeArray(array:Array):void
 		{			
-			
-			for each ( var o in array ) 
-			{
-				this.write(o);
-			}		
-			
+			for each ( var o in array )
+				this.write(o);			
 		}
 		
 		// Object
@@ -388,8 +373,6 @@ package
 		public function getBytesAvailable():uint
 		{
 			return socket.bytesAvailable;
-		}
-		
-	}
-	
+		}		
+	}	
 }
