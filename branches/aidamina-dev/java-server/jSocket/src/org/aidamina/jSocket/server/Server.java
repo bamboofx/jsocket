@@ -14,8 +14,9 @@ public class Server {
 		while(true)
 		{
 			Socket client = server.accept();
-			System.out.println("accepted: " +client.getRemoteSocketAddress());
-			Thread.sleep(1000);
+			System.out.println("Accepted: " +client.getRemoteSocketAddress());
+			while(client.getInputStream().available()==0)
+				Thread.sleep(0);
 			new Handler(client);
 		}
 	}
