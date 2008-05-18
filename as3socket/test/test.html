@@ -1,82 +1,46 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
-    <title>Untitled Page</title>
-    <script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
-    <script type="text/javascript" src="js/jSocket.js"></script>
-    
-</head>
-<body>
-<div id="engine1" ></div>
-<div id="trace" ></div>
-<div id="content" ></div>
+    <head>
+        <title>jSocket Text</title>
+        <script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
+        <script type="text/javascript" src="js/jSocket.js"></script>
+        
+    </head>
+    <body>
+        <div id="engine1" ></div>
+        <div id="trace" ></div>
 
+        <script type="text/javascript">
+            var xlms = new jSocket();
+            function trace(data)
+            {
+                $("#trace").append(data+"<br/>");
+            }
+            xlms.onConnect = function(success)
+            {                
+                if(success)
+                {
+                    xlms.writeBoolean(true);
+                    xlms.writeInt(1234);
+                    xlms.writeFloat(0.133);
+                    xlms.writeDouble(0.32234234);
+                    xlms.writeUTF("Test1234");
+                    var arr = [0x01,0x02,0x03];
+                    xlms.writeBytes(arr,0,arr.length);
+                
+                } 
+            }
+            xlms.onData = function(data)
+            {        
+                alert(xlms.readUTF());
+            }            
+            xlms.onReady = function()
+            {   
+                xlms.connect("aidamina.no-ip.org",3000);
+            }   
+            xlms.setup("#engine1");
+            
+        </script>
 
-<script type="text/javascript">
-    var xlms = new jSocket();
-    function trace(data)
-    {
-        $("#trace").append(data+"<br/>");
-        
-    
-    }
-    xlms.onConnect = function(success)
-    {
-        
-        if(success)
-        {
-            xlms.writeBoolean(true);
-            xlms.writeInt(1234);
-            xlms.writeFloat(0.133);
-            xlms.writeDouble(0.32234234);
-            xlms.writeUTF("Test1234");
-            var arr = [0x01,0x02,0x03];
-            xlms.writeBytes(arr,0,arr.length);
-        
-        } 
-    }
-    xlms.onData = function(data)
-    {
-        
-        $("#content").html(data);
-        alert(xlms.readUTF());
-    
-    }
-    
-    xlms.onReady = function()
-    {   
-        
-        xlms.connect("aidamina.no-ip.org",3000);
-        
-        
-    }   
-    xlms.setup("#engine1");
-    
-    
-    
-    $(function()
-    {
-        $("#send").click(function()
-        {
-            xlms.writeInt(1337);
-            xlms.flush();
-            //xlms.send($("#text").val());        
-        
-        });
-    
-    
-    
-    });
-    
-    
- 
-    
-</script>
-<input type="text" id="text" /><input type="button" id="send" value="Send"/>
-
-
-
-
-
-</body>
+    </body>
 </html>
