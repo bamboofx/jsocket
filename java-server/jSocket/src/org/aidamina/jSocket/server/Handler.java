@@ -10,27 +10,17 @@ public class Handler {
 		// Check if we get a security request
 		if(client.getInputStream().available()==23) 
 		{
-			System.out.println("Sending crossdomain.xml");
-			
+			System.out.println("Sending crossdomain.xml");			
 			DataInputStream dis = new DataInputStream(new FileInputStream("crossdomain.xml"));
 			String contents = "";
-		      while (dis.available() != 0)
-		    	  contents+=dis.readLine();
-		      
-		      client.getOutputStream().write(contents.getBytes());
-		      client.getOutputStream().flush();
-		      client.close();
+			byte [] buffer = new byte [dis.available()];
+			dis.readFully(buffer);  
+			client.getOutputStream().write(buffer);
+			client.close();
 		}
 		else
-		{
-			
+		{			
 			new Test(client);
-			
-			
 		}
-			
-		
-		
 	}
-
 }
