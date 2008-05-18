@@ -3,8 +3,7 @@
     <head>
         <title>jSocket Text</title>
         <script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
-        <script type="text/javascript" src="js/jSocket.js"></script>
-        
+        <script type="text/javascript" src="js/jSocket.js"></script>        
     </head>
     <body>        
         <div id="engine1" ></div>
@@ -18,14 +17,15 @@
             {                
                 if(success)
                 {
-                    xlms.writeBoolean(true);
-                    xlms.writeInt(1234);
-                    xlms.writeFloat(0.133);
-                    xlms.writeDouble(0.32234234);
-                    xlms.writeUTF("Test1234");
-                    var arr = [0x01,0x02,0x03];
-                    xlms.writeBytes(arr,0,arr.length);                
-                } 
+                    xlms.writeBoolean(true);                    
+                    xlms.writeInt(1234);                    
+                    xlms.writeFloat(0.133);                    
+                    xlms.writeDouble(0.32234234);                    
+                    xlms.writeUTF("Test1234");                    
+                    var arr = [0x01,0x02,0x03];                    
+                    xlms.writeBytes(arr,0,arr.length);
+                    xlms.flush();
+                }
             }
             xlms.onData = function(data)
             {        
@@ -33,10 +33,9 @@
             }            
             xlms.onReady = function()
             {   
-                xlms.connect("aidamina.no-ip.org",3000);
+                xlms.connect(null,3000);
             }   
             xlms.setup("#engine1");            
         </script>
-
     </body>
 </html>

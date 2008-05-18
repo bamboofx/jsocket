@@ -19,10 +19,10 @@
   <build>
     <option accessible="False" />
     <option allowSourcePathOverlap="False" />
-    <option benchmark="False" />
+    <option benchmark="True" />
     <option es="False" />
     <option loadConfig="" />
-    <option optimize="False" />
+    <option optimize="True" />
     <option showActionScriptWarnings="True" />
     <option showBindingWarnings="True" />
     <option showDeprecationWarnings="True" />
