@@ -3,4 +3,8 @@
 
 = Examples =
 
+== Client ==
   * [SimpleExample Simple Example]
+
+== Server ==
+  * Todo
