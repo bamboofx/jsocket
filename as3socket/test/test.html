@@ -6,10 +6,8 @@
         <script type="text/javascript" src="js/jSocket.js"></script>
         
     </head>
-    <body>
+    <body>        
         <div id="engine1" ></div>
-        <div id="trace" ></div>
-
         <script type="text/javascript">
             var xlms = new jSocket();
             function trace(data)
@@ -26,8 +24,7 @@
                     xlms.writeDouble(0.32234234);
                     xlms.writeUTF("Test1234");
                     var arr = [0x01,0x02,0x03];
-                    xlms.writeBytes(arr,0,arr.length);
-                
+                    xlms.writeBytes(arr,0,arr.length);                
                 } 
             }
             xlms.onData = function(data)
@@ -38,8 +35,7 @@
             {   
                 xlms.connect("aidamina.no-ip.org",3000);
             }   
-            xlms.setup("#engine1");
-            
+            xlms.setup("#engine1");            
         </script>
 
     </body>
