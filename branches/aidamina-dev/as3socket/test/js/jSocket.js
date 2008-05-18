@@ -86,14 +86,6 @@ jSocket.prototype.connect = function(host,port){
     this.movie.connect(host, port);     
 }
 
-// Send data over the socket connection
-// data: data to send 
-jSocket.prototype.send = function(data){
-    if(!this.connected||!this.movie)
-        throw "jSocket is not connected, use the onConnect event ";
-    return this.movie.send(data);
-}
-
 //  Close the socket connection
 jSocket.prototype.close = function(){
     this.connected = false;
@@ -151,10 +143,10 @@ function jSocket_onInit(id){
 
 // Callback for the flash object to signal data is received
 // triggers jSocket.onData
-function jSocket_onData(id, data){
+function jSocket_onData(id, size){
     var socket = jSocket_GetSocket(id);
     if(socket.onData)
-        socket.onData(data);
+        socket.onData(size);
 }
 
 // Callback for the flash object to signal the connection attempt is finished
@@ -183,13 +175,6 @@ function jSocket_onClose(id){
         socket.onClose();
 }
 
-jSocket.prototype.writeInt = function(data){      
-    
-    if(!this.connected||!this.movie)
-        throw "jSocket is not connected, use the onConnect event ";
-    return this.movie.writeInt(data);  
-}
-
 
 jSocket.prototype.checkConnected = function(){      
     
@@ -203,6 +188,14 @@ jSocket.prototype.write = function(data)
     this.checkConnected();
     this.movie.write(data);
 
+}
+
+// Int
+jSocket.prototype.writeInt = function(data){      
+    
+    if(!this.connected||!this.movie)
+        throw "jSocket is not connected, use the onConnect event ";
+    return this.movie.writeInt(data);  
 }
 
 // Boolean
