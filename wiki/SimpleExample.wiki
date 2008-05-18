@@ -1,5 +1,5 @@
 #summary Simple jSocket Example
-#labels Phase-Implementation,example
+#labels Phase-Implementation,example,Deprecated
 = Simple Example =
 
 Include the necesary javascript files:
