@@ -57,6 +57,10 @@ package
 			add("close", close);
 			add("flush", flush);
 			
+			
+			// Generic write
+			add("write", write);			
+			
 			// Boolean
 			add("writeBoolean", writeBoolean);
 			add("readBoolean", readBoolean);
@@ -97,11 +101,22 @@ package
 			add("writeUTF", writeUTF);
 			add("readUTF", readUTF);
 			
-			// AMF
+			// Array
+			add("writeArray", writeArray);
+			
+			// Object
 			add("writeObject", writeObject);
-			add("readObject", readObject);
+			add("readObject", readObject);			
+			
+			// Properties
 			add("setObjectEncoding", setObjectEncoding);
 			add("getObjectEncoding", getObjectEncoding);
+			
+			add("setEndian", setEndian);
+			add("getEndian", getEndian);
+			
+			add("getBytesAvailable", getBytesAvailable);
+			
 			
 			ExternalInterface.call("jSocket_onInit",id);
 			
@@ -152,6 +167,46 @@ package
 			ExternalInterface.call("jSocket_onData", id, event.bytesLoaded);
 		}
 		
+		// Generic write
+		public function write(data):void
+		{
+			switch(typeof(data))
+			{
+				case Boolean:
+				socket.writeBoolean(data);
+				break;
+				
+				case int:
+				socket.writeInt(data);
+				break;
+				
+				case uint:
+				socket.writeUnsignedInt(data);
+				break;
+				
+				case Number:
+				socket.writeDouble(data);
+				break;
+				
+				case String:
+				socket.writeUTF(data);
+				break;
+				
+				case Array:
+				writeArray(data);
+				break;
+				
+				case Object:
+				socket.writeObject(data);
+				break;
+				
+				default:
+				throw "Unknown type";				
+			}
+			
+		}
+		
+		
 		// Boolean
 		public function writeBoolean(data:Boolean):void
 		{
@@ -173,15 +228,31 @@ package
 		{
 			return socket.readByte();
 		}
-		
-		public function writeBytes(bytes:ByteArray, offset:uint, length:uint):void
+						
+		public function writeBytes(array:Array, offset:uint, length:uint):void
 		{
-			socket.writeBytes(bytes, offset, length);
+			var buffer:ByteArray = new ByteArray();
+			
+			for each ( var o:int in array ) 
+			{
+				buffer.writeByte(o);
+			}
+			
+			socket.writeBytes(buffer, offset, length);
 		}
 		
-		public function readBytes(bytes:ByteArray, offset:uint, length:uint):void
+		public function readBytes(length:uint):Array
 		{
-			socket.readBytes(bytes, offset, length);
+			var bytes:ByteArray = new ByteArray();
+			
+			socket.readBytes(bytes, 0, length);
+			var array:Array = new Array();
+			bytes.position = 0;
+			while (bytes.bytesAvailable > 0)
+			{
+				array.push(bytes.readByte());				
+			}
+			return array;
 		}
 		
 		// Short
@@ -271,7 +342,18 @@ package
 			return socket.readUTF();
 		}
 		
-		//AMF
+		// Array
+		public function writeArray(array:Array):void
+		{			
+			
+			for each ( var o in array ) 
+			{
+				this.write(o);
+			}		
+			
+		}
+		
+		// Object
 		public function writeObject(data:Object):void
 		{
 			socket.writeObject(data);
@@ -282,6 +364,7 @@ package
 			return socket.readObject();			
 		}
 		
+		// Properties
 		public function setObjectEncoding(value:uint):void
 		{			
 			socket.objectEncoding = value;			
@@ -290,6 +373,21 @@ package
 		public function getObjectEncoding():uint
 		{
 			return socket.objectEncoding;			
+		}
+		
+		public function setEndian(value:String):void
+		{			
+			socket.endian = value;			
+		}
+		
+		public function getEndian():String
+		{
+			return socket.endian;
+		}
+		
+		public function getBytesAvailable():uint
+		{
+			return socket.bytesAvailable;
 		}
 		
 	}
