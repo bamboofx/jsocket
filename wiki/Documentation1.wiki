@@ -59,7 +59,7 @@ Reads an unsigned 16-bit integer from the stream.
 ===jSocket.readUTF()===
 Reads a UTF-8 string from the stream.
 
-===jSocket.readUTFBytes(length:uint)===
+===jSocket.readUTFBytes(length)===
 Reads a sequence of UTF-8 bytes from the stream and returns a string.
 
 
@@ -84,7 +84,7 @@ Writes an IEEE 754 single-precision (32-bit) floating point number.
 ===jSocket.writeInt(value)===
 Writes a 32-bit signed integer.
 
-===jSocket.writeMultiByte(value, charSet) 
+===jSocket.writeMultiByte(value, charSet)===
 Writes a multibyte string to the stream.
 
 ===jSocket.writeArray(array)===
