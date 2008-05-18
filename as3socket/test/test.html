@@ -4,8 +4,6 @@
     <title>Untitled Page</title>
     <script type="text/javascript" src="js/jquery-1.2.3.min.js"></script>
     <script type="text/javascript" src="js/jSocket.js"></script>
-    <script type="text/javascript" src="js/json2.js"></script>
-
     
 </head>
 <body>
@@ -27,7 +25,6 @@
         
         if(success)
         {
-            //xlms.send("Ik wil graag wat hebben plx!!!");
             xlms.writeBoolean(true);
             xlms.writeInt(1234);
             xlms.writeFloat(0.133);
@@ -40,9 +37,9 @@
     }
     xlms.onData = function(data)
     {
-        alert(data);
+        
         $("#content").html(data);
-    
+        alert(xlms.readUTF());
     
     }
     
