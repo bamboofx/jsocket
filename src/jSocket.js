@@ -22,25 +22,12 @@
 // THE SOFTWARE.
 
 
-// Container that holds the jSocket Objects
-var jSocketContainer = [];
-
 // jSocket Constructor
 function jSocket(){
-    // Random id to identify the socket
-    while(true){
-        this.id = "jSocket_"+Math.round(Math.random()*10000);
-        try{
-            // Should throw an exception if it can't find the id in the container
-            jSocket_GetSocket(this.id);         
-        }
-        catch(e){
-            // We found an unused id
-            break;
-        }
-    }    
-    // Put the jSocket in the container
-    jSocketContainer.push({id: this.id, socket:this});     
+
+	this.id = "jSocket_"+ (++jSocket.last_id);
+    	
+	jSocket.sockets[this.id] = this;     
     
     // Unused variable name used in flash for testing
     // Should use jSocket.variableTest = 'whatever' 
@@ -50,29 +37,56 @@ function jSocket(){
     this.connected = false;  
 }
 
+/**
+ * Object used as array with named keys to
+ * keep references to the instantiated sockets
+ * @var Object
+ */
+jSocket.sockets = {};
+
+/**
+ * Id used to generate a unique id for the embedded swf
+ * @var int
+ */
+jSocket.last_id = 0;
+
 // Find the Swf object
 jSocket.prototype.findSwf = function(){
-    if (window.document[this.id]){
-        return window.document[this.id];
+	if (window.document[this.id]){
+		return window.document[this.id];
+	}
+	if (document.embeds && document.embeds[this.id]){
+		return document.embeds[this.id]; 
     }
-    if (!$.browser.msi){
-        if (document.embeds && document.embeds[this.id])
-        return document.embeds[this.id]; 
-    }
-    else{
-        return $("#"+this.id)[0];
-    }
+    return document.getElementById(this.id);
 }
 
 // Setup the socket
 // target: jQuery selector specifying the container that the jSocket will be placed in
-jSocket.prototype.setup = function(target)
+jSocket.prototype.setup = function(target, swflocation)
 {
-    if(this.target!=undefined) throw 'Can only call setup on a jSocket Object once.';
+	if(typeof(swfobject) == 'undefined')
+		throw 'SWFObject not found! Please download from http://code.google.com/p/swfobject/';
+    if(typeof(this.target) != 'undefined')
+    	throw 'Can only call setup on a jSocket Object once.';
     this.target = target; 
     
-    // Add the object to the dom    
-    $(this.target).append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0\" width=\"1\" height=\"1\" id=\""+this.id+"\"><param name=\"movie\" value=\"jSocket.swf?"+this.id+"\"/><param name=\"allowScriptAccess\" value=\"always\"/><param name=\"quality\" value=\"high\"/><embed src=\"jSocket.swf?"+this.id+"\" quality=\"high\" width=\"1\" height=\"1\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" name=\""+this.id+"\" swLiveConnect=\"true\"></embed></object>");    
+    // Add the object to the dom
+    return swfobject.embedSWF(
+    	(swflocation ? swflocation : 'jSocket.swf')+'?'+this.id,
+    	target,
+    	'0', // width
+    	'0', // height
+    	'9.0.0',
+    	'expressInstall.swf',
+    	// Flashvars
+    	{},
+    	// Params
+    	{'menu' : 'false'},
+    	// Attributes
+    	{'id':this.id, 'name':this.id}
+    );
+	
 }
 
 // Connect to a listening socket
@@ -93,28 +107,11 @@ jSocket.prototype.close = function(){
         this.movie.close();    
 }
 
-// Find a socket by id in the jSocketContainer
-// id: socket id
-function jSocket_GetSocket(id){
-    var socket = false;
-    $.each(jSocketContainer,function()
-    {
-        if(this.id==id){
-            socket = this.socket;
-            return false;
-        }    
-    });
-    if(socket)
-        return socket;
-    // Exception is used in the constructor
-    throw "jSocket '"+id+"' not found in jSocketContainer";
-}
-
 // Callback for the flash object to signal the flash file is loaded
 // triggers jSocket.onReady
 function jSocket_onInit(id){
     
-    var socket = jSocket_GetSocket(id);
+    var socket = jSocket.sockets[id];
     
     var v = socket.variableTest;
     // Wait until we can actually set Variables in flash
@@ -132,19 +129,19 @@ function jSocket_onInit(id){
             err=false;
         }
         catch(e){ 
-            window.setTimeout(f,0);
+            setTimeout(f,0);
         }
         // Fire the event
         if(!err&&socket.onReady)
             socket.onReady();
     }
-    window.setTimeout(f,0);
+    setTimeout(f,0);
 }
 
 // Callback for the flash object to signal data is received
 // triggers jSocket.onData
 function jSocket_onData(id, size){
-    var socket = jSocket_GetSocket(id);
+	var socket = jSocket.sockets[id];
     if(socket.onData)
         socket.onData(size);
 }
@@ -152,7 +149,7 @@ function jSocket_onData(id, size){
 // Callback for the flash object to signal the connection attempt is finished
 // triggers jSocket.onConnect
 function jSocket_onConnect(id){
-    var socket = jSocket_GetSocket(id);
+	var socket = jSocket.sockets[id];
     socket.connected = true;
     if(socket.onConnect)
         socket.onConnect(true);
@@ -161,7 +158,7 @@ function jSocket_onConnect(id){
 // Callback for the flash object to signal the connection attempt is finished
 // triggers jSocket.onConnect
 function jSocket_onError(id, error){
-    var socket = jSocket_GetSocket(id);
+	var socket = jSocket.sockets[id];
     if(socket.onConnect)
         socket.onConnect(false,error);
 }
@@ -169,7 +166,7 @@ function jSocket_onError(id, error){
 // Callback for the flash object to signal the connection was closed from the other end
 // triggers jSocket.onClose
 function jSocket_onClose(id){
-    var socket = jSocket_GetSocket(id);
+	var socket = jSocket.sockets[id];
     socket.connected = false;
     if(socket.onClose)
         socket.onClose();
