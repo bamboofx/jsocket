@@ -24,8 +24,7 @@
 
 // Int
 jSocket.prototype.writeInt = function(data){
-    if(!this.connected||!this.movie)
-        throw "jSocket is not connected, use the onConnect event ";
+	this.checkConnected();
     return this.movie.writeInt(data);  
 }
 
@@ -161,26 +160,32 @@ jSocket.prototype.writeObject = function(data){
 }
 
 jSocket.prototype.readObject = function(){
+	this.checkConnected();
 	return this.movie.readObject();
 }
 
 // Properties
 jSocket.prototype.setObjectEncoding = function(value){
+	this.checkConnected();
 	this.movie.setObjectEncoding(value);
 }
 
 jSocket.prototype.getObjectEncoding = function(){
+	this.checkConnected();
 	return this.movie.getObjectEncoding();
 }
 
 jSocket.prototype.setEndian = function(value){
+	this.checkConnected();
 	this.movie.setEndian(value);
 }
 
 jSocket.prototype.getEndian = function(){
+	this.checkConnected();
 	return this.movie.getEndian();
 }
 
 jSocket.prototype.getBytesAvailable = function(){
+	this.checkConnected();
     return this.movie.getBytesAvailable();
 }

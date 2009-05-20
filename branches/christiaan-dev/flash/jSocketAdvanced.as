@@ -1,43 +1,49 @@
-﻿// The MIT License
-
-// Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
-// http://jsocket.googlecode.com
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-package
+﻿/* jSocket.as
+ * 
+ * The MIT License
+ * 
+ * Copyright (c) 2009 Christiaan baartse <christiaan@baartse.nl>
+ * Copyright (c) 2009 Erik Rigtorp <erik@rigtorp.com>
+ * Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
+ * http://jsocket.googlecode.com
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package 
 {
-	public class jSocket 
+	import flash.display.Sprite;
+	import flash.external.ExternalInterface;
+	import flash.events.*;
+	import flash.net.Socket;
+	import flash.utils.ByteArray;
+
+	public class jSocketAdvanced extends Sprite
 	{		
-		import flash.external.ExternalInterface;
-		import flash.events.*;
-		import flash.net.Socket;
-		import flash.utils.ByteArray;
 		private var socket:Socket;
 		private var id:String;
 				
-		private function add(name:String, f:Function):void{
+		private function add(name:String, f:Function):void {
 			ExternalInterface.addCallback(name, f);
 		}
 		
-		public function jSocket(id:String){
-			this.id = id;
+		public function jSocket(id:String):void {
+			id = id;
 			socket = new Socket();
 			socket.addEventListener("close", onClose);
 			socket.addEventListener("connect", onConnect);
@@ -111,6 +117,26 @@ package
 			ExternalInterface.call("jSocket_onInit",id);			
 		}
 		
+		private function onConnect(event:Event):void{
+			ExternalInterface.call("jSocket.flashCallback", "connect", id);
+		}
+		
+		private function onError(event:IOErrorEvent):void{
+			ExternalInterface.call("jSocket.flashCallback", "error", id, event.text);
+		}
+		
+		private function onSecurityError(event:SecurityErrorEvent):void{
+			ExternalInterface.call("jSocket.flashCallback", "error", id, event.text);
+		}
+		
+		private function onClose(event:Event):void{
+			ExternalInterface.call("jSocket.flashCallback", "close", id);
+		}
+		
+		private function onData(event:ProgressEvent):void{
+			ExternalInterface.call("jSocket.flashCallback", "data", id, event.bytesLoaded);
+		}
+		
 		public function connect(host:String, port:int):void{
 			socket.connect(host, port);	
 		}
@@ -123,28 +149,9 @@ package
 			socket.flush();
 		}
 		
-		private function onConnect(event:Event):void{
-			ExternalInterface.call("jSocket_onConnect", id);
-		}
-		
-		private function onError(event:IOErrorEvent):void{
-			ExternalInterface.call("jSocket_onError", id, event.text);
-		}
-		
-		private function onSecurityError(event:SecurityErrorEvent):void{
-			ExternalInterface.call("jSocket_onError", id, event.text);
-		}
-		
-		private function onClose(event:Event):void{
-			ExternalInterface.call("jSocket_onClose", id);
-		}
-		
-		private function onData(event:ProgressEvent):void{
-			ExternalInterface.call("jSocket_onData", id, event.bytesLoaded);
-		}
 		
 		// Generic write
-		public function write(data):void{
+		public function write(data:*):void{
 			switch(typeof(data))
 			{
 				case Boolean:
@@ -288,7 +295,7 @@ package
 		
 		// Array
 		public function writeArray(array:Array):void{			
-			for each ( var o in array )
+			for each ( var o:* in array )
 				this.write(o);			
 		}
 		
