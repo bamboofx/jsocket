@@ -1,6 +1,7 @@
 ﻿// The MIT License
 
 // Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
+// Copyright (c) 2009 Christiaan Baartse <christiaan@baartse.nl>
 // http://jsocket.googlecode.com
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,8 +22,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-function jSocket(){
-
+/**
+ * Construct
+ * @param onReady When the socket is added the to document and the swf is loaded
+ * @param onConnect Connection attempt finished
+ * @param onData Received data
+ * @param onClose Server closed socket
+ */
+function jSocket(onReady, onConnect, onData, onClose)
+{
+	this.onReady = onReady;
+	this.onConnect = onConnect;
+	this.onData = onData;
+	this.onClose = onClose;
+	
 	this.id = "jSocket_"+ (++jSocket.last_id);
     	
 	jSocket.sockets[this.id] = this;     
@@ -58,8 +71,8 @@ jSocket.prototype.findSwf = function(){
 	}
 	if (document.embeds && document.embeds[this.id]){
 		return document.embeds[this.id]; 
-    }
-    return document.getElementById(this.id);
+	}
+	return document.getElementById(this.id);
 }
 
 /**
@@ -71,26 +84,26 @@ jSocket.prototype.setup = function(target, swflocation)
 {
 	if(typeof(swfobject) == 'undefined')
 		throw 'SWFObject not found! Please download from http://code.google.com/p/swfobject/';
-    if(typeof(this.target) != 'undefined')
-    	throw 'Can only call setup on a jSocket Object once.';
-    this.target = target; 
-    
-    // Add the object to the dom
-    return swfobject.embedSWF(
-    	(swflocation ? swflocation : 'jSocket.swf')+'?'+this.id,
-    	target,
-    	'0', // width
-    	'0', // height
-    	'9.0.0',
-    	'expressInstall.swf',
-    	// Flashvars
-    	{},
-    	// Params
-    	{'menu' : 'false'},
-    	// Attributes
-    	{'id':this.id, 'name':this.id}
-    );
-	
+	if(typeof(this.target) != 'undefined')
+		throw 'Can only call setup on a jSocket Object once.';
+	this.target = target;
+
+	// Add the object to the dom
+	return swfobject.embedSWF(
+		(swflocation ? swflocation : 'jSocket.swf')+'?'+this.id,
+		target,
+		'0', // width
+		'0', // height
+		'9.0.0',
+		'expressInstall.swf',
+		// Flashvars
+		{},
+		// Params
+		{'menu' : 'false'},
+		// Attributes
+		{'id':this.id, 'name':this.id}
+	);
+
 }
 
 /**
@@ -188,14 +201,14 @@ jSocket.executeFlashCallback = function(name, id, data)
 		break;
 		
 		// Callback for the flash object to signal data is received
-		// triggers jsXMLSocket.onData
+		// triggers jSocket.onData
 		case 'data':
 		    if(socket.onData)
 		    	socket.onData(data);
 		break;
 	
 		// Callback for the flash object to signal the connection attempt is finished
-		// triggers jsXMLSocket.onConnect
+		// triggers jSocket.onConnect
 		case 'connect':
 		    socket.connected = true;
 		    if(socket.onConnect)
@@ -203,14 +216,14 @@ jSocket.executeFlashCallback = function(name, id, data)
 		break;
 		
 		// Callback for the flash object to signal the connection attempt is finished
-		// triggers jsXMLSocket.onConnect
+		// triggers jSocket.onConnect
 		case 'error':
 			if(socket.onConnect)
 		        socket.onConnect(false,data);
 		break;
 		
 		// Callback for the flash object to signal the connection was closed from the other end
-		// triggers jsXMLSocket.onClose
+		// triggers jSocket.onClose
 		case 'close':
 		    socket.connected = false;
 		    if(socket.onClose)
