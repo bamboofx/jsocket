@@ -1,4 +1,4 @@
-﻿/* jSocket.as
+/* jSocket.as
  * 
  * The MIT License
  * 
@@ -25,6 +25,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package 
 {
 	import flash.display.Sprite;
@@ -38,12 +39,13 @@ package
 		private var socket:Socket;
 		private var id:String;
 				
-		private function add(name:String, f:Function):void {
-			ExternalInterface.addCallback(name, f);
-		}
+		public function jSocketAdvanced():void {
+			// Pass exceptions between flash and browser
+			ExternalInterface.marshallExceptions = true;
 		
-		public function jSocket(id:String):void {
-			id = id;
+			var url:String = root.loaderInfo.url;
+			id = url.substring(url.lastIndexOf("?") + 1);
+			
 			socket = new Socket();
 			socket.addEventListener("close", onClose);
 			socket.addEventListener("connect", onConnect);
@@ -51,70 +53,70 @@ package
 			socket.addEventListener("securityError", onSecurityError);
 			socket.addEventListener("socketData", onData);
 			
-			add("connect", connect);
-			add("close", close);
-			add("flush", flush);
+			ExternalInterface.addCallback("connect", connect);
+			ExternalInterface.addCallback("close", close);
+			ExternalInterface.addCallback("flush", flush);
 						
 			// Generic write
-			add("write", write);			
+			ExternalInterface.addCallback("write", write);			
 			
 			// Boolean
-			add("writeBoolean", writeBoolean);
-			add("readBoolean", readBoolean);
+			ExternalInterface.addCallback("writeBoolean", writeBoolean);
+			ExternalInterface.addCallback("readBoolean", readBoolean);
 			
 			// Byte
-			add("writeByte", writeByte);
-			add("readByte", writeByte);
-			add("writeBytes", writeBytes);
-			add("readBytes", readBytes);
+			ExternalInterface.addCallback("writeByte", writeByte);
+			ExternalInterface.addCallback("readByte", writeByte);
+			ExternalInterface.addCallback("writeBytes", writeBytes);
+			ExternalInterface.addCallback("readBytes", readBytes);
 			
 			// Short
-			add("writeShort", writeShort);
-			add("readShort", readShort);
+			ExternalInterface.addCallback("writeShort", writeShort);
+			ExternalInterface.addCallback("readShort", readShort);
 			
 			// Int
-			add("writeInt", writeInt);
-			add("readInt", readInt);
+			ExternalInterface.addCallback("writeInt", writeInt);
+			ExternalInterface.addCallback("readInt", readInt);
 			
 			// Uint
-			add("writeUnsignedInt", writeUnsignedInt);
-			add("readUnsignedInt", readUnsignedInt);
+			ExternalInterface.addCallback("writeUnsignedInt", writeUnsignedInt);
+			ExternalInterface.addCallback("readUnsignedInt", readUnsignedInt);
 			
 			// Float
-			add("writeFloat", writeFloat);
-			add("readFloat", readFloat);
+			ExternalInterface.addCallback("writeFloat", writeFloat);
+			ExternalInterface.addCallback("readFloat", readFloat);
 			
 			// Double
-			add("writeDouble", writeDouble);
-			add("readDouble", readDouble);
+			ExternalInterface.addCallback("writeDouble", writeDouble);
+			ExternalInterface.addCallback("readDouble", readDouble);
 			
 			// MultiByte
-			add("writeMultiByte", writeMultiByte);
-			add("readMultiByte", readMultiByte);
+			ExternalInterface.addCallback("writeMultiByte", writeMultiByte);
+			ExternalInterface.addCallback("readMultiByte", readMultiByte);
 			
 			// UTF
-			add("writeUTFBytes", writeUTFBytes);
-			add("readUTFBytes", readUTFBytes);
-			add("writeUTF", writeUTF);
-			add("readUTF", readUTF);
+			ExternalInterface.addCallback("writeUTFBytes", writeUTFBytes);
+			ExternalInterface.addCallback("readUTFBytes", readUTFBytes);
+			ExternalInterface.addCallback("writeUTF", writeUTF);
+			ExternalInterface.addCallback("readUTF", readUTF);
 			
 			// Array
-			add("writeArray", writeArray);
+			ExternalInterface.addCallback("writeArray", writeArray);
 			
 			// Object
-			add("writeObject", writeObject);
-			add("readObject", readObject);			
+			ExternalInterface.addCallback("writeObject", writeObject);
+			ExternalInterface.addCallback("readObject", readObject);			
 			
 			// Properties
-			add("setObjectEncoding", setObjectEncoding);
-			add("getObjectEncoding", getObjectEncoding);
+			ExternalInterface.addCallback("setObjectEncoding", setObjectEncoding);
+			ExternalInterface.addCallback("getObjectEncoding", getObjectEncoding);
 			
-			add("setEndian", setEndian);
-			add("getEndian", getEndian);
+			ExternalInterface.addCallback("setEndian", setEndian);
+			ExternalInterface.addCallback("getEndian", getEndian);
 			
-			add("getBytesAvailable", getBytesAvailable);			
+			ExternalInterface.addCallback("getBytesAvailable", getBytesAvailable);			
 			
-			ExternalInterface.call("jSocket_onInit",id);			
+			ExternalInterface.call("jSocket.flashCallback", "init", id);
 		}
 		
 		private function onConnect(event:Event):void{

@@ -1,4 +1,4 @@
-﻿/* jSocket.as
+/* jSocket.as
  * 
  * The MIT License
  * 
@@ -43,7 +43,7 @@ package
 			ExternalInterface.marshallExceptions = true;
 			
 			var url:String = root.loaderInfo.url;
-			id = url.substring(url.lastIndexOf("?") + 1, url.length);
+			id = url.substring(url.lastIndexOf("?") + 1);
 			
 			socket = new XMLSocket();
 			socket.addEventListener("close", onClose);

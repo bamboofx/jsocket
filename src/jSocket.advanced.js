@@ -21,6 +21,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+jSocket.prototype.flush = function(){
+	this.checkConnected();
+    return this.movie.flush();  
+}
 
 // Int
 jSocket.prototype.writeInt = function(data){
