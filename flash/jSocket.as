@@ -2,7 +2,7 @@
  * 
  * The MIT License
  * 
- * Copyright (c) 2009 Christiaan baartse <christiaan@baartse.nl>
+ * Copyright (c) 2009 Christiaan Baartse <christiaan@baartse.nl>
  * Copyright (c) 2009 Erik Rigtorp <erik@rigtorp.com>
  * Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
  * http://jsocket.googlecode.com

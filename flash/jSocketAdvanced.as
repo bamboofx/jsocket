@@ -1,8 +1,8 @@
-/* jSocket.as
+/* jSocketAdvanced.as
  * 
  * The MIT License
  * 
- * Copyright (c) 2009 Christiaan baartse <christiaan@baartse.nl>
+ * Copyright (c) 2009 Christiaan Baartse <christiaan@baartse.nl>
  * Copyright (c) 2009 Erik Rigtorp <erik@rigtorp.com>
  * Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
  * http://jsocket.googlecode.com
@@ -214,9 +214,9 @@ package
 			socket.writeBytes(buffer, offset, length);
 		}
 		
-		public function readBytes(length:uint):Array{
+		public function readBytes(offset:uint, length:uint):Array{
 			var bytes:ByteArray = new ByteArray();			
-			socket.readBytes(bytes, 0, length);
+			socket.readBytes(bytes, offset, length);
 			var array:Array = new Array();
 			bytes.position = 0;
 			while (bytes.bytesAvailable > 0)			

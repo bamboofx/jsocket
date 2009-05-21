@@ -1,51 +1,49 @@
-﻿// The MIT License
-
-// Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
-// Copyright (c) 2009 Christiaan Baartse <christiaan@baartse.nl>
-// http://jsocket.googlecode.com
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+﻿/* jSocket.js
+ * 
+ * The MIT License
+ * 
+ * Copyright (c) 2009 Christiaan Baartse <christiaan@baartse.nl>
+ * Copyright (c) 2009 Erik Rigtorp <erik@rigtorp.com>
+ * Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
+ * http://jsocket.googlecode.com
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 /**
  * Construct
- * @param onReady When the socket is added the to document and the swf is loaded
- * @param onConnect Connection attempt finished
- * @param onData Received data
- * @param onClose Server closed socket
+ * @param {function} onReady	When the SWF is added the to document and ready for use
+ * @param {function} onConnect	Connection attempt finished (either succesfully or with an error)
+ * @param {function} onData		Socket received data from the remote host
+ * @param {function} onClose	Remote host disconnects the connection
  */
-function jSocket(onReady, onConnect, onData, onClose)
-{
-	this.onReady = onReady;
-	this.onConnect = onConnect;
-	this.onData = onData;
-	this.onClose = onClose;
-	
+function jSocket(onReady, onConnect, onData, onClose) {
+	this.onReady	= onReady;
+	this.onConnect	= onConnect;
+	this.onData		= onData;
+	this.onClose	= onClose;
+
 	this.id = "jSocket_"+ (++jSocket.last_id);
-    	
 	jSocket.sockets[this.id] = this;     
-    
-    // Unused variable name used in flash for testing
-    // Should use jSocket.variableTest = 'whatever' 
-    // If you are using a variable 'xt' in your flashmovie
-    this.variableTest ='xt';     
-    // Connection state
-    this.connected = false;  
+
+	// Connection state
+	this.connected = false;  
 }
 
 /**
@@ -62,10 +60,17 @@ jSocket.sockets = {};
 jSocket.last_id = 0;
 
 /**
+ * A nonexisting public flash object variable
+ * This variable is used for testing access to the object.
+ * @var String
+ */
+jSocket.variableTest ='xt';
+
+/**
  * Find the SWF in the DOM and return it
  * @return DOMNode
  */
-jSocket.prototype.findSwf = function(){
+jSocket.prototype.findSwf = function() {
 	if (window.document[this.id]){
 		return window.document[this.id];
 	}
@@ -77,11 +82,10 @@ jSocket.prototype.findSwf = function(){
 
 /**
  * Insert the SWF into the DOM
- * @param String {target}		The id of the DOMnode that will get replaced by the SWF 
- * @param String {swflocation}	The filepath to the SWF
+ * @param String	{target}		The id of the DOMnode that will get replaced by the SWF 
+ * @param String	{swflocation}	The filepath to the SWF
  */
-jSocket.prototype.setup = function(target, swflocation)
-{
+jSocket.prototype.setup = function(target, swflocation) {
 	if(typeof(swfobject) == 'undefined')
 		throw 'SWFObject not found! Please download from http://code.google.com/p/swfobject/';
 	if(typeof(this.target) != 'undefined')
@@ -111,18 +115,18 @@ jSocket.prototype.setup = function(target, swflocation)
  * @param String	{host} Hostname or ip to connect to
  * @param Int		{port} Port to connect to on the given host
  */
-jSocket.prototype.connect = function(host,port){    
-    if(!this.movie)
-        throw "jSocket isn't ready yet, use the onReady event";
-    if(this.connected)
-        this.movie.close();
-    this.movie.connect(host, port);     
+jSocket.prototype.connect = function(host,port) {
+	if(!this.movie)
+		throw "jSocket isn't ready yet, use the onReady event";
+	if(this.connected)
+		this.movie.close();
+	this.movie.connect(host, port);     
 }
 
 /**
  * Close the current socket connection
  */
-jSocket.prototype.close = function(){
+jSocket.prototype.close = function() {
     this.connected = false;
     if(this.movie)
         this.movie.close();    
@@ -132,14 +136,16 @@ jSocket.prototype.close = function(){
  * Send data trough the socket to the server
  * @param Mixedvar {data} The data to be send to the sever
  */
-jSocket.prototype.write = function(data)
-{
-    this.checkConnected();
+jSocket.prototype.write = function(data) {
+    this.assertConnected();
     this.movie.write(data);
 }
 
-jSocket.prototype.checkConnected = function(){      
-    
+/**
+ * Make sure the socked is connected.
+ * @throws Exception Throws an exception when the socket isn't connected
+ */
+jSocket.prototype.assertConnected = function() {      
     if(!this.connected||!this.movie)
         throw "jSocket is not connected, use the onConnect event ";
 }
@@ -150,8 +156,7 @@ jSocket.prototype.checkConnected = function(){
  * @param String	{id}	Id of the socket
  * @param String	{data}	Used for data and errors
  */
-jSocket.flashCallback = function(name, id, data)
-{
+jSocket.flashCallback = function(name, id, data) {
 	// Because the swf locks up untill the callback is done executing we want to get this over with asap!
 	// http://www.calypso88.com/?p=25
 	var f = function(){
@@ -167,15 +172,14 @@ jSocket.flashCallback = function(name, id, data)
  * @param String	{id}	Id of the socket
  * @param String	{data}	Used for data and errors
  */
-jSocket.executeFlashCallback = function(name, id, data)
-{
+jSocket.executeFlashCallback = function(name, id, data) {
 	var socket = jSocket.sockets[id];
 	
 	switch (name) {
 		// Callback for the flash object to signal the flash file is loaded
 		// triggers jsXMLSocket.onReady
 		case 'init':
-		    var v = socket.variableTest;
+		    var v = jSocket.variableTest;
 		    // Wait until we can actually set Variables in flash
 		    var f = function(){
 		        var err = true;
@@ -193,7 +197,7 @@ jSocket.executeFlashCallback = function(name, id, data)
 		        catch(e){ 
 		            setTimeout(f,0);
 		        }
-		        // Fire the event
+		        // Fire the onReady event
 		        if(!err&&socket.onReady)
 		            socket.onReady();
 		    }
@@ -231,6 +235,6 @@ jSocket.executeFlashCallback = function(name, id, data)
 		break;
 		
 		default:
-			throw "jSocket: unknown callback used";
+			throw "jSocket: unknown callback '"+name+"' used";
 	}
 }
