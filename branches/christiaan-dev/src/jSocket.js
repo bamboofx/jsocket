@@ -71,13 +71,7 @@ jSocket.variableTest ='xt';
  * @return DOMNode
  */
 jSocket.prototype.findSwf = function() {
-	if (window.document[this.id]){
-		return window.document[this.id];
-	}
-	if (document.embeds && document.embeds[this.id]){
-		return document.embeds[this.id]; 
-	}
-	return document.getElementById(this.id);
+	return document.getElementById(this.target);
 }
 
 /**
@@ -95,7 +89,7 @@ jSocket.prototype.setup = function(target, swflocation) {
 	// Add the object to the dom
 	return swfobject.embedSWF(
 		(swflocation ? swflocation : 'jSocket.swf')+'?'+this.id,
-		target,
+		this.target,
 		'0', // width
 		'0', // height
 		'9.0.0',
@@ -105,7 +99,7 @@ jSocket.prototype.setup = function(target, swflocation) {
 		// Params
 		{'menu' : 'false'},
 		// Attributes
-		{'id':this.id, 'name':this.id}
+		{}
 	);
 
 }
