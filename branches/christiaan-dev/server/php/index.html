@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script type="text/javascript" src="swfobject.js"></script>
+<script type="text/javascript" src="../../src/jSocket.js"></script>
+<title>jSocket PHP server test</title>
+<script type="text/javascript">
+	var socket = new jSocket(
+		function() {
+			document.getElementById('debug').innerHTML += 'On Ready!<br />\n';
+			document.getElementById('debug').innerHTML += 'Connecting to '+location.host+' on port '+5011+'<br />\n';
+			this.connect('localhost', 5011);
+		},
+		function(success, error) {
+			if(success) {
+				document.getElementById('debug').innerHTML += 'Succesfully connected!<br />\n';
+			} else {
+				document.getElementById('debug').innerHTML += 'Could not connect: '+error+'<br />\n';
+			}
+	    },
+	    function(data) {
+	    	document.getElementById('debug').innerHTML += 'Recieved data: '+data+'<br />\n';
+	    },
+	    function() {
+	    	document.getElementById('debug').innerHTML += 'Disconnected!<br />\n';
+	    }
+	);
+
+	// On DOM ready
+	window.onload = function(){
+		socket.setup('xmlsocket', '/jsocket/flash/jSocket.swf');
+	};
+</script>
+</head>
+<body>
+	<div id="debug"></div>
+	<input type="button" onclick="socket.write('hello');" value="Send Hello" />
+	<div id="xmlsocket"></div>
+</body>
+</html>
