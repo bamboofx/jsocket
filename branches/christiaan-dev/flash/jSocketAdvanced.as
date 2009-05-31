@@ -28,37 +28,14 @@
 
 package 
 {
-	import flash.display.Sprite;
+	import flash.utils.ByteArray;
 	import flash.external.ExternalInterface;
 	import flash.events.*;
-	import flash.net.Socket;
-	import flash.utils.ByteArray;
+	import jSocket;
 
-	public class jSocketAdvanced extends Sprite
+	public class jSocketAdvanced extends jSocket
 	{		
-		private var socket:Socket;
-		private var id:String;
-				
 		public function jSocketAdvanced():void {
-			// Pass exceptions between flash and browser
-			ExternalInterface.marshallExceptions = true;
-		
-			var url:String = root.loaderInfo.url;
-			id = url.substring(url.lastIndexOf("?") + 1);
-			
-			socket = new Socket();
-			socket.addEventListener("close", onClose);
-			socket.addEventListener("connect", onConnect);
-			socket.addEventListener("ioError", onError);
-			socket.addEventListener("securityError", onSecurityError);
-			socket.addEventListener("socketData", onData);
-			
-			ExternalInterface.addCallback("connect", connect);
-			ExternalInterface.addCallback("close", close);
-			ExternalInterface.addCallback("flush", flush);
-						
-			// Generic write
-			ExternalInterface.addCallback("write", write);			
 			
 			// Boolean
 			ExternalInterface.addCallback("writeBoolean", writeBoolean);
@@ -116,79 +93,14 @@ package
 			
 			ExternalInterface.addCallback("getBytesAvailable", getBytesAvailable);			
 			
-			ExternalInterface.call("jSocket.flashCallback", "init", id);
-		}
-		
-		private function onConnect(event:Event):void{
-			ExternalInterface.call("jSocket.flashCallback", "connect", id);
-		}
-		
-		private function onError(event:IOErrorEvent):void{
-			ExternalInterface.call("jSocket.flashCallback", "error", id, event.text);
-		}
-		
-		private function onSecurityError(event:SecurityErrorEvent):void{
-			ExternalInterface.call("jSocket.flashCallback", "error", id, event.text);
-		}
-		
-		private function onClose(event:Event):void{
-			ExternalInterface.call("jSocket.flashCallback", "close", id);
+			
+			super();
 		}
 		
 		private function onData(event:ProgressEvent):void{
 			ExternalInterface.call("jSocket.flashCallback", "data", id, event.bytesLoaded);
 		}
 		
-		public function connect(host:String, port:int):void{
-			socket.connect(host, port);	
-		}
-		
-		public function close():void{
-			socket.close();
-		}
-		
-		public function flush():void{
-			socket.flush();
-		}
-		
-		
-		// Generic write
-		public function write(data:*):void{
-			switch(typeof(data))
-			{
-				case Boolean:
-				socket.writeBoolean(data);
-				break;
-				
-				case int:
-				socket.writeInt(data);
-				break;
-				
-				case uint:
-				socket.writeUnsignedInt(data);
-				break;
-				
-				case Number:
-				socket.writeDouble(data);
-				break;
-				
-				case String:
-				socket.writeUTF(data);
-				break;
-				
-				case Array:
-				writeArray(data);
-				break;
-				
-				case Object:
-				socket.writeObject(data);
-				break;
-				
-				default:
-				throw "Unknown type";				
-			}			
-		}
-				
 		// Boolean
 		public function writeBoolean(data:Boolean):void{
 			socket.writeBoolean(data);

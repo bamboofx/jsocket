@@ -31,12 +31,12 @@ package
 	import flash.display.Sprite;
 	import flash.external.ExternalInterface;
 	import flash.events.*;
-	import flash.net.XMLSocket;
+	import flash.net.Socket;
 	
 	public class jSocket extends Sprite
 	{		
-		private var socket:XMLSocket;
-		private var id:String;
+		protected var socket:Socket;
+		protected var id:String;
 		
 		public function jSocket():void {
 			// Pass exceptions between flash and browser
@@ -45,12 +45,13 @@ package
 			var url:String = root.loaderInfo.url;
 			id = url.substring(url.lastIndexOf("?") + 1);
 			
-			socket = new XMLSocket();
+			socket = new Socket();
 			socket.addEventListener("close", onClose);
 			socket.addEventListener("connect", onConnect);
 			socket.addEventListener("ioError", onError);
 			socket.addEventListener("securityError", onSecurityError);
-			socket.addEventListener("data", onData);
+			socket.addEventListener("socketData", onData);
+			
 					
 			ExternalInterface.addCallback("connect", connect);
 			ExternalInterface.addCallback("close", close);
@@ -60,7 +61,7 @@ package
 		}
 		
 		public function connect(host:String, port:int):void{
-			socket.connect(host, port);	
+			socket.connect(host, port);
 		}
 		
 		public function close():void{
@@ -68,7 +69,8 @@ package
 		}
 		
 		public function write(object:*):void{
-			socket.send(object);
+			socket.writeUTFBytes(object);
+			socket.flush();
 		}
 		
 		private function onConnect(event:Event):void{
@@ -87,8 +89,8 @@ package
 			ExternalInterface.call("jSocket.flashCallback", "close", id);
 		}
 		
-		private function onData(event:DataEvent):void{
-			ExternalInterface.call("jSocket.flashCallback", "data", id, event.data);
+		private function onData(event:ProgressEvent):void{
+			ExternalInterface.call("jSocket.flashCallback", "data", id, socket.readUTFBytes(event.bytesLoaded));
 		}
 	}	
 }
