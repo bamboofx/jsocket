@@ -23,22 +23,27 @@ public class Server implements Runnable{
 			System.out.println("Listening on port "+port);
 			while(true)
 			{
-				final Socket client = server.accept();
-				System.out.println("Accepted: " +client.getRemoteSocketAddress());
-				while(client.getInputStream().available()==0)
+				final Socket socket = server.accept();
+				System.out.println("Accepted: " +socket.getRemoteSocketAddress());
+				while(socket.getInputStream().available()==0)
 					Thread.sleep(0);
 				
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						try {
-							
-							new Handler(client);
+							Client client = new Client(socket);
+							for(OnConnectCallback callback : OnConnect)
+							{
+								callback.onConnect(client);								
+								
+							}
+							//new Handler(socket);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}						
 					}					
-				}).run();		
+				}).start();		
 			}		
 		}catch(Exception e)
 		{
