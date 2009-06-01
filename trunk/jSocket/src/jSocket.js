@@ -169,7 +169,7 @@ jSocket.executeFlashCallback = function(name, id, data) {
 	
 	switch (name) {
 		// Callback for the flash object to signal the flash file is loaded
-		// triggers jSocket.onReady
+		// triggers jsXMLSocket.onReady
 		case 'init':
 		    var v = jSocket.variableTest;
 		    // Wait until we can actually set Variables in flash
