@@ -2,7 +2,7 @@
  * 
  * The MIT License
  * 
- * Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen
+ * Copyright (c) 2008 Tjeerd Jan 'Aidamina' van der Molen <aidamina@gmail.com>
  * http://jsocket.googlecode.com
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
