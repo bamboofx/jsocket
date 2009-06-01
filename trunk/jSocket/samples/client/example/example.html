@@ -22,9 +22,14 @@
         mySocket.connect("localhost",3000);
         
       }
-      function connect()
+      function connect(success,data)
       {
         console.log("socket connected");
+        if(!success)
+        {
+          console.log(data)
+          return;
+        }
         mySocket.write("test1234");
       
       }
