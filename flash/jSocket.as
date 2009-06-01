@@ -71,23 +71,23 @@ package
 			socket.flush();
 		}
 		
-		private function onConnect(event:Event):void{
+		protected function onConnect(event:Event):void{
 			ExternalInterface.call("jSocket.flashCallback", "connect", id);
 		}
 		
-		private function onError(event:IOErrorEvent):void{
+		protected function onError(event:IOErrorEvent):void{
 			ExternalInterface.call("jSocket.flashCallback", "error", id, event.text);
 		}
 		
-		private function onSecurityError(event:SecurityErrorEvent):void{
+		protected function onSecurityError(event:SecurityErrorEvent):void{
 			ExternalInterface.call("jSocket.flashCallback", "error", id, event.text);
 		}
 		
-		private function onClose(event:Event):void{
+		protected function onClose(event:Event):void{
 			ExternalInterface.call("jSocket.flashCallback", "close", id);
 		}
 		
-		private function onData(event:ProgressEvent):void{
+		protected function onData(event:ProgressEvent):void{
 			ExternalInterface.call("jSocket.flashCallback", "data", id, socket.readUTFBytes(event.bytesLoaded));
 		}
 	}	
