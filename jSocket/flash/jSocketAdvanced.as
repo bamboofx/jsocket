@@ -95,7 +95,7 @@ package
 			super();
 		}
 		
-		private function onData(event:ProgressEvent):void{
+		override protected function onData(event:ProgressEvent):void{
 			ExternalInterface.call("jSocket.flashCallback", "data", id, event.bytesLoaded);
 		}
 		
