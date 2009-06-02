@@ -16,8 +16,7 @@ public class PolicyServer implements Runnable
 	{
 		DataInputStream dis = new DataInputStream(new FileInputStream("crossdomain.xml"));
 		contents = new byte [dis.available()];
-		dis.readFully(contents);
-		
+		dis.readFully(contents);		
 		server = new ServerSocket(port);
 	}
 
