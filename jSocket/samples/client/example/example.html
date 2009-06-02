@@ -19,7 +19,7 @@
       function ready()
       {
         console.log("socket ready");
-        mySocket.connect("localhost",3000);
+        mySocket.connect("127.0.0.1",80);
         
       }
       function connect(success,data)
@@ -27,15 +27,16 @@
         console.log("socket connected");
         if(!success)
         {
-          console.log(data)
+          console.log("error:"+data)
           return;
         }
-        mySocket.write("test1234");
+        mySocket.write("GET / HTTP/1.1\r\n\r\n");
       
       }
-      function data()
+      function data(content)
       {
         console.log("socket data");
+        console.log(content)
       
       }
       function close()
