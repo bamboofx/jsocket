@@ -1,5 +1,5 @@
 #summary jSocket Documentation
-#labels documentation,Phase-Implementation,Featured
+#labels documentation,Phase-Implementation
 =jSocket Object=
 
 =UNDER CONTRUCTION=
