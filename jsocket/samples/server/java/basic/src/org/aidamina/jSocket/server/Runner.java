@@ -1,8 +1,9 @@
 package org.aidamina.jSocket.server;
 
 import java.io.IOException;
+import java.net.Socket;
 
-public class Runner implements Server.OnConnectCallback{
+public class Runner implements Server.OnConnectCallback,Client.OnDataCallback,Client.OnCloseCallback{
 
 	public Runner() {
 		
@@ -25,11 +26,28 @@ public class Runner implements Server.OnConnectCallback{
 	@Override
 	public void onConnect(Client client) {
 		try {
-			System.out.println(client.getSocket().getInputStream().available());
+			client.OnData.add(this);
+			client.OnClose.add(this);
+			Socket socket = client.getSocket();
+			System.out.println(socket.getInputStream().available());
+			socket.getOutputStream().write("blagh".getBytes());
+			socket.getOutputStream().flush();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+
+	@Override
+	public void onData(Client client, byte[] data) {
+
+		System.out.println(new String(data));
+		
+	}
+	public void onClose(Client client) {
+
+		System.out.println("Closed: "+client.getSocket().getRemoteSocketAddress());
 		
 	}
 
