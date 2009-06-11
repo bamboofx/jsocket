@@ -84,6 +84,7 @@ package
 		}
 		
 		protected function onClose(event:Event):void{
+            socket.close();
 			ExternalInterface.call("jSocket.flashCallback", "close", id);
 		}
 		
