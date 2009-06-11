@@ -55,7 +55,7 @@ package
 			ExternalInterface.addCallback("close", close);
 			ExternalInterface.addCallback("write", write);
 			
-			ExternalInterface.call("jSocket.flashCallback", "init", id);			
+			ExternalInterface.call("jSocket.flashCallback", "init", id);
 		}
 		
 		public function connect(host:String, port:int):void{
