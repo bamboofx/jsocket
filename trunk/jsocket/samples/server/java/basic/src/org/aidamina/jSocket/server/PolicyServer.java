@@ -1,10 +1,7 @@
 package org.aidamina.jSocket.server;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
 public class PolicyServer implements Runnable
 {
@@ -46,7 +43,6 @@ public class PolicyServer implements Runnable
 		try {
 			policyServer = new PolicyServer();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Thread thread = new Thread(policyServer);

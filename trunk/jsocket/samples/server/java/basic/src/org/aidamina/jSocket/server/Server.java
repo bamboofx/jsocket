@@ -1,13 +1,11 @@
 package org.aidamina.jSocket.server;
-import java.io.IOException;
 import java.net.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 public class Server implements Runnable{
 
 	
 	int port;
-	List<OnConnectCallback> OnConnect = new LinkedList<Server.OnConnectCallback> ();
+	List<OnConnectCallback> OnConnect = new LinkedList<OnConnectCallback> ();
 	public Server(int port) {
 		
 		this.port = port;
@@ -25,8 +23,7 @@ public class Server implements Runnable{
 			{
 				final Socket socket = server.accept();
 				System.out.println("Accepted: " +socket.getRemoteSocketAddress());
-				while(socket.getInputStream().available()==0)
-					Thread.sleep(0);
+				
 				
 				new Thread(new Runnable() {
 					@Override
@@ -38,7 +35,6 @@ public class Server implements Runnable{
 								callback.onConnect(client);								
 								
 							}
-							//new Handler(socket);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}						

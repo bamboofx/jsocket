@@ -7,7 +7,7 @@
     <script src="../common/js/common.js" type="text/javascript"></script>
     <script src="http://swfobject.googlecode.com/svn/trunk/swfobject/src/swfobject.js" type="text/javascript"></script>
     <script src="../../../src/jsocket.js" type="text/javascript"></script>
-    <script src="../../../src/jsocket.advanced.js" type="text/javascript"></script>
+    <script src="../../../src/jquery.socket.js" type="text/javascript"></script>
     
     <link rel="stylesheet" href="../common/css/style.css" type="text/css"/>
   </head>
@@ -16,47 +16,58 @@
     <div id="my_socket"></div>
     
     <script type="text/javascript">
-     
+    if(!window.console)
+        window.console = {log:function(data){alert(data);}};
+    
+    $(function(){
+      
+       console.log("load");
+      
       function ready()
       {
         console.log("socket ready");
-        mySocket.connect("127.0.0.1", 80);
+        mySocket.connect("127.0.0.1",90);
         
       }
       function connect(success,data)
       {
-        console.log("socket connected");
+        console.log("socket connected"+success);
         if(!success)
         {
           console.log("error:"+data)
           return;
         }
-        mySocket.write("GET / HTTP/1.1\r\n\r\n");
-        
-      }
+        $("#my_socket").socket().write("GET / HTTP/1.1\r\n\r\n");
       
+      }
       function data(content)
       {
         console.log("socket data");
         console.log(content)
-      
+        $("#my_socket").socket().close();
+        //$("#my_socket").socket().write(content);
       }
       function close()
       {
         console.log("socket close");
       
-      }    
-    
-      var mySocket = new jSocket(ready,connect,data,close);      
+      }
+        var options = {
+           onReady:ready,
+           onConnect:connect,
+           onData:data,
+           onClose:close,
+           swf:"../../../flash/jsocket.swf"
+           };
       
-      mySocket.setup("my_socket","../../../flash/jsocket.advanced.swf");    
     
-    
+      var mySocket = $("div").socket(options);
+           
+      
+    });
+       
     </script>
-    
-    
-    
-    
+        
     <!-- Google Analytics Code, do not include in own implementation!-->
     <script type="text/javascript">
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
