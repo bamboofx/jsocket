@@ -15,20 +15,20 @@ Please take note of the fact that the jSocket.write function and jSocket.onData 
 Contructor of our jSocket Object. 
 Internal id registration takes place here.
 
-[Reference#jSocket.onReady() onReady:function (optional)]
-[Reference#jSocket.onConnect() onConnect:function (optional)]
-[Reference#jSocket.onData() onData:function (optional)]
-[Reference#jSocket.onClose() onClose:function (optional)]
+[Reference#jSocket.onReady() onReady:function (optional)]<br/>
+[Reference#jSocket.onConnect(success,_error) onConnect:function (optional)]<br/>
+[Reference#jSocket.onData(data) onData:function (optional)]<br/>
+[Reference#jSocket.onClose() onClose:function (optional)]<br/>
 
 ==Methods==
 
 ===jSocket.setup(target)===
-*target:string* id of the element to replace with the socket.
+*target:string* id of the element to replace with the socket.<br/>
 Add the socket swf to the page, by replacing an element specified with the target argument. [Reference#jSocket.onReady() jSocket.onReady] Will be fired upon succesful completion.
 
 ===jSocket.connect(host, port)===
-*host:string* hostname or ip of the server for the socket to connect with.
-*port:int* port to use on the host
+*host:string* hostname or ip of the server for the socket to connect with.<br/>
+*port:int* port to use on the host<br/>
 Call this method to connect to a listening socket. Method takes two required arguments, host which should be a host name or a valid ip address to connect to, and port to indicate which port we are connecting on. 
 
 After the socket has tried to connect the [Reference#jSocket.onConnect(success,_error) jSocket.onConnect] event will be triggered.
@@ -39,7 +39,7 @@ Please make sure to read [Security the wiki entry about Security] flash imposes 
 Call this method to close the socket connection. This does *not* trigger the [Reference#jSocket.onClose() jSocket.onClose] event.
 
 ===jSocket.write(data)===
-*data:string*
+*data:string* string to be sent to server<br/>
 Call this method to send a string through the connected socket.
 
 If you want to send other data types you should have a look at the [ReferenceAdvanced jsocket.advanced.js reference]
@@ -50,13 +50,13 @@ If you want to send other data types you should have a look at the [ReferenceAdv
 Called by the socket when socket is ready for use. You generally want to call the [Reference#jSocket.connect(host,_port) jSocket.connect] within this function.
 
 ===jSocket.onConnect(success, error)===
-*success:boolean* true if connection was succesful
-*error:string* flash IO error message
+*success:boolean* true if connection was succesful<br/>
+*error:string* flash IO error message<br/>
 Called when socket has finished connecting. success will either be true when the connection is estabilished or false when it failed.
 error will contain the error text when the connection fails.
 
 ===jSocket.onData(data)===
-*data:string* string sent by the server
+*data:string* string sent by the server<br/>
 Called when jSocket has has received a string from the server over the socket connection.
 
 ===jSocket.onClose()===
