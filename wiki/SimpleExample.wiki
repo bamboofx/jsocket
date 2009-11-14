@@ -2,6 +2,8 @@
 #labels Phase-Implementation,example,Deprecated
 = Simple Example =
 
+NOTE: THIS EXAMPLE USES THE OLD API AND WILL NOT WORK WITH THE LATEST SVN COMMIT
+
 Include the necesary javascript files:
 {{{
 <head>
