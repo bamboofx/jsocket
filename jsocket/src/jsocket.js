@@ -196,7 +196,7 @@ jSocket.executeFlashCallback = function(name, id, data) {
         }
         // Fire the onReady event
         if(!err&&typeof socket.onReady=="function")
-          socket.onReady.call(socket);
+          socket.onReady();
       };
       setTimeout(f, 0);
     break;
@@ -205,7 +205,7 @@ jSocket.executeFlashCallback = function(name, id, data) {
     // triggers jSocket.onData
     case 'data':
       if(typeof socket.onData=="function")
-        socket.onData.call(socket, data);
+        socket.onData(data);
     break;
 
     // Callback for the flash object to signal the connection attempt is finished
@@ -213,14 +213,14 @@ jSocket.executeFlashCallback = function(name, id, data) {
     case 'connect':
       socket.connected = true;
       if(typeof socket.onConnect=="function")
-        socket.onConnect.call(socket, true);
+        socket.onConnect(true);
     break;
 
     // Callback for the flash object to signal the connection attempt is finished
     // triggers jSocket.onConnect
     case 'error':
       if(typeof socket.onConnect=="function")
-        socket.onConnect.call(socket, false, data);
+        socket.onConnect(false, data);
     break;
 
     // Callback for the flash object to signal the connection was closed from the other end
@@ -228,7 +228,7 @@ jSocket.executeFlashCallback = function(name, id, data) {
     case 'close':
       socket.connected = false;
       if(typeof socket.onClose=="function")
-        socket.onClose.call(socket);
+        socket.onClose();
     break;
 
     default:
