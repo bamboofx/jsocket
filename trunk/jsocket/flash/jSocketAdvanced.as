@@ -41,13 +41,21 @@ package
 			
 			// Byte
 			ExternalInterface.addCallback("writeByte", writeByte);
-			ExternalInterface.addCallback("readByte", writeByte);
+			ExternalInterface.addCallback("readByte", readByte);
+			
+			// Ubyte
+			ExternalInterface.addCallback("readUnsignedByte", readUnsignedByte);
+			
+			// Bytes
 			ExternalInterface.addCallback("writeBytes", writeBytes);
 			ExternalInterface.addCallback("readBytes", readBytes);
 			
 			// Short
 			ExternalInterface.addCallback("writeShort", writeShort);
 			ExternalInterface.addCallback("readShort", readShort);
+			
+			// Ushort
+			ExternalInterface.addCallback("readUnsignedShort", readUnsignedShort);
 			
 			// Int
 			ExternalInterface.addCallback("writeInt", writeInt);
@@ -89,8 +97,7 @@ package
 			ExternalInterface.addCallback("setEndian", setEndian);
 			ExternalInterface.addCallback("getEndian", getEndian);
 			
-			ExternalInterface.addCallback("getBytesAvailable", getBytesAvailable);			
-			
+			ExternalInterface.addCallback("getBytesAvailable", getBytesAvailable);
 			
 			super();
 		}
@@ -116,7 +123,13 @@ package
 		public function readByte():int{
 			return socket.readByte();
 		}
-						
+		
+		// Ubyte
+		public function readUnsignedByte():int{
+			return socket.readUnsignedByte();
+		}
+		
+		// Bytes
 		public function writeBytes(array:Array, offset:uint, length:uint):void{
 			var buffer:ByteArray = new ByteArray();			
 			for each ( var o:int in array )
@@ -141,6 +154,11 @@ package
 		
 		public function readShort():int{
 			return socket.readShort();
+		}
+		
+		// Ushort
+		public function readUnsignedShort():int{
+			return socket.readUnsignedShort();
 		}
 		
 		// Int
