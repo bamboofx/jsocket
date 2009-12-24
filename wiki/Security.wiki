@@ -18,7 +18,7 @@ Don't forget that this leaves your server open for requests from every flash app
 
 
 
-Read:
+For more information read:
 
   * [http://www.adobe.com/devnet/flashplayer/articles/fplayer9_security_04.html Policy file changes in Flash Player 9]
   * [http://kb.adobe.com/selfservice/viewContent.do?externalId=kb403364&sliceId=1 Sockets in Flash Player versions later than 9.0.115.0]
