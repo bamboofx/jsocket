@@ -9,7 +9,7 @@
 = Flash =
 
 Flash has some pretty aggressive socket permission systems.
-All these systems take place server side and thus not in the scope of this project.
+All these systems take place server side and thus are not in the scope of this project.
 That said, i do provide you with an example policy file:
 
 [http://code.google.com/p/jsocket/source/browse/trunk/jSocket/flash/crossdomain.xml crossdomain.xml]
