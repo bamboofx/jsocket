@@ -2,24 +2,19 @@
 #labels Phase-Implementation,example,Deprecated
 = Simple Example =
 
-NOTE: THIS EXAMPLE USES THE OLD API AND WILL NOT WORK WITH THE LATEST SVN COMMIT
 
 Include the necesary javascript files:
 {{{
 <head>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-	<script type="text/javascript" src="jSocket.js"></script>
+	<script type="text/javascript" src="jsocket.js"></script>
 </head>
 }}}
-Note:
-  * jQuery should be included *before* jSocket
-  * Using "http://code.jquery.com/jquery-latest.js" for development purposes is ok, but you really should download a jQuery release to your own webserver.
 
   
 The actual script:
 {{{
 <body>
-	<div id='socket'/>
+	<div id='mySocket'/>
 	
 	<script type='text/javascript'>
 	// Host we are connecting to
@@ -31,16 +26,16 @@ The actual script:
 	
 	// When the socket is added the to document 
 	socket.onReady = function(){
-		socket.connect(host,port);		
+		socket.connect(host, port);		
 	}
 	
 	// Connection attempt finished
-	socket.onConnect = function(success){
+	socket.onConnect = function(success, msg){
 		if(success){
 			// Send something to the socket
-			socket.send('Hello world');		
+			socket.write('Hello world');		
 		}else{
-			alert('Connection to the server could not be estabilished');		
+			alert('Connection to the server could not be estabilished: ' + msg);		
 		}	
 	}
 	socket.onData = function(data){
@@ -48,7 +43,7 @@ The actual script:
 	}
 	
 	// Setup our socket in the div with the id="socket"
-	socket.setup('#socket');	
+	socket.setup('mySocket');	
 	
 	</script>
 
