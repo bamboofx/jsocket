@@ -57,8 +57,8 @@ error will contain the error text when the connection fails.
 
 ===jSocket.onData(data)===
 *data:string* string sent by the server<br/>
-Called when jSocket has has received a string from the server over the socket connection.
-Please note that if you use jsocket.advanced.js or the jsocket.advanced.swf the argument of this callback changes. [ReferenceAdvanced jsocket.advanced.js reference]
+Called when jSocket has has received a string from the server over the socket connection.<br/>
+*Please note that if you use jsocket.advanced.js or the jsocket.advanced.swf the use of the argument of this callback changes.* [ReferenceAdvanced jsocket.advanced.js reference]
 
 ===jSocket.onClose()===
 Called when the socket connection has been closed server side.
