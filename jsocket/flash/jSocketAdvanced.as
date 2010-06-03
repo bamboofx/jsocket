@@ -34,6 +34,9 @@ package
 	public class jSocketAdvanced extends jSocket
 	{		
 		public function jSocketAdvanced():void {
+		
+			// Flush
+			ExternalInterface.addCallback("flush", flush);
 			
 			// Boolean
 			ExternalInterface.addCallback("writeBoolean", writeBoolean);
@@ -104,6 +107,11 @@ package
 		
 		override protected function onData(event:ProgressEvent):void{
 			ExternalInterface.call("jSocket.flashCallback", "data", id, event.bytesLoaded);
+		}
+		
+		//Flush
+		public function flush():void{
+			socket.flush();
 		}
 		
 		// Boolean
