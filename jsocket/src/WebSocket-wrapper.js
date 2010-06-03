@@ -1,3 +1,29 @@
+/* WebSocket-wrapper.js
+ *
+ * The MIT License
+ *
+ * Copyright (c) 2010 Tjeerd Jan 'Aidamina' van der Molen <aidamina@gmail.com>
+ * http://jsocket.googlecode.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 // parseUri 1.2.2
 // (c) Steven Levithan <stevenlevithan.com>
 // MIT License
@@ -43,6 +69,53 @@ function WebSocket(url,protocol){
 	this._eventEl = document.createElement("div");
 	this._flashEl = document.createElement("div");
 	
+	function SendRequest(){
+		var r = 
+		"GET "+uri["path"]+" HTTP/1.1\n"+
+		"Upgrade: WebSocket\n"+
+		"Connection: Upgrade\n"+
+		"Host: "+uri["host"]+":"+uri["port"]+"\n"+
+		"Origin: "+window.location.protocol+"://"+window.location.host+"\n";		
+		if(protocol)
+			r+="WebSocket-Protocol: "+protocol+"\n";		
+		r+="\n";
+		
+		ws._socket.write(r);
+	
+	
+	}
+	
+	function ondata(data){
+	
+		if(ws.readyState==WebSocket.CONNECTING)
+		{
+			//Parse and validate handshake
+			
+			var event = document.createEvent("Event");
+			event.initEvent("open",false,false);
+			ws.dispatchEvent(event);
+		
+			ws.readyState==WebSocket.OPEN
+		}
+		if(ws.readyState==WebSocket.OPEN)
+		{
+			var event = document.createEvent("Event");
+			event.initEvent("data",false,false);
+			event.data = data;
+			ws.dispatchEvent(event);
+		
+		
+		}
+		
+	}
+	function onclose(){
+	
+		var event = document.createEvent("Event");
+		event.initEvent("close",false,false);
+
+		ws.dispatchEvent(event);
+	
+	}
 	
 	function onready(){
 	
@@ -52,11 +125,21 @@ function WebSocket(url,protocol){
 	}
 	function onconnect(result,msg){
 	
-		alert(result+" "+msg);
+		if(result){
+			SendRequest();
+		}
+		else
+		{
+			var event = document.createEvent("Event");
+			event.initEvent("close",false,false);
+
+			ws.dispatchEvent(event);
+		}
+		
 	}
 	
 	
-	this._socket = new jSocket(onready,onconnect);
+	this._socket = new jSocket(onready,onconnect,ondata,onclose);
 	function rdy(){return document.readyState === "complete";}
 	
 	function setup(){
@@ -97,7 +180,7 @@ WebSocket.prototype.send = function(data){
 
 WebSocket.prototype.close = function(){
 
-	
+	this._socket.close();
 
 }
 
@@ -121,24 +204,8 @@ WebSocket.prototype.dispatchEvent = function(evt){
 	return false;
 
 }
-                     
-/*
-var ws = new WebSocket("ws://127.0.0.1:8181/service");
-
-
-
-var event = document.createEvent("Event");
-event.initEvent("open",false,false);
-
-ws.dispatchEvent(event);
-
-
-*/
-
-if (!window.WebSocket)
+//if (!window.WebSocket)
 	window.WebSocket = WebSocket;
-
-
 
 
 })();
