@@ -58,13 +58,14 @@ parseUri.options = {
 
 
 (function(){
-var t = window.WebSocketTunnel || {};
-window.WebSocketTunnel = t;
+
+console = window.console || {log:function(){}};
 
 function WebSocket(url,protocol){
-	var ws = this;
-	
+	var ws = this;	
 	var uri = parseUri(url);
+	
+	// TODO: some sanity/security checks on the uri and protocol
 	
 	this._eventEl = document.createElement("div");
 	this._flashEl = document.createElement("div");
@@ -82,44 +83,44 @@ function WebSocket(url,protocol){
 		
 		ws._socket.write(r);
 	
-	
 	}
 	
-	function ondata(data){
-	
+	function ondata(size){
+		
 		if(ws.readyState==WebSocket.CONNECTING)
 		{
-			//Parse and validate handshake
+			//TODO: Parse and validate handshake
+			var handshake = ws._socket.readUTFBytes(size);
+			
 			
 			var event = document.createEvent("Event");
 			event.initEvent("open",false,false);
 			ws.dispatchEvent(event);
 		
-			ws.readyState==WebSocket.OPEN
+			ws.readyState=WebSocket.OPEN;
+			
 		}
-		if(ws.readyState==WebSocket.OPEN)
+		else if(ws.readyState==WebSocket.OPEN)
 		{
+			var intro = ws._socket.readByte();
+			var data = ws._socket.readUTFBytes(size-2);
+			var outro = ws._socket.readByte();
 			var event = document.createEvent("Event");
-			event.initEvent("data",false,false);
+			event.initEvent("message",false,false);
 			event.data = data;
 			ws.dispatchEvent(event);
-		
-		
+			
 		}
-		
 	}
 	function onclose(){
 	
 		var event = document.createEvent("Event");
 		event.initEvent("close",false,false);
-
 		ws.dispatchEvent(event);
 	
 	}
 	
-	function onready(){
-	
-		console.log("socket ready");
+	function onready(){	
 		ws._socket.connect(uri["host"],uri["port"]);
 	
 	}
@@ -127,20 +128,16 @@ function WebSocket(url,protocol){
 	
 		if(result){
 			SendRequest();
-		}
-		else
-		{
+		} else {
 			var event = document.createEvent("Event");
 			event.initEvent("close",false,false);
 
 			ws.dispatchEvent(event);
 		}
-		
 	}
 	
-	
-	this._socket = new jSocket(onready,onconnect,ondata,onclose);
-	function rdy(){return document.readyState === "complete";}
+	this._socket = new jSocket(onready, onconnect, ondata, onclose);
+	function rdy(){ return document.readyState === "complete"; }
 	
 	function setup(){
 		var tar = "__"+ws._socket.id;
@@ -159,9 +156,6 @@ function WebSocket(url,protocol){
 			}		
 		},50);
 	}
-	
-	
-
 }
 WebSocket.CONNECTING  =0;
 WebSocket.OPEN = 1;
@@ -172,14 +166,18 @@ WebSocket.prototype.readyState = WebSocket.CONNECTING;
 WebSocket.prototype.bufferedAmount = 0;
 
 WebSocket.prototype.send = function(data){
-
-	
-
+		
+		this._socket.writeByte(0x00);
+		this._socket.writeUTFBytes(data);
+		this._socket.writeByte(0xFF);
+		this._socket.flush();
 }
 
 
 WebSocket.prototype.close = function(){
-
+	
+	this.readyState = WebSocket.CLOSING;
+	this._socket.flush();
 	this._socket.close();
 
 }
@@ -191,7 +189,7 @@ WebSocket.prototype.removeEventListener = function(type,listener,useCapture){
 	this._eventEl.removeEventListener(type,listener,useCapture);
 }
 WebSocket.prototype.dispatchEvent = function(evt){
-	
+	console.log("dispatched event "+evt.type);
 	if(["open","message","error","close"].indexOf(evt.type)!=-1)
 	{
 		var h = this["on"+evt.type];
@@ -199,12 +197,12 @@ WebSocket.prototype.dispatchEvent = function(evt){
 			h(evt);
 	
 	}
+	if(evt.type==="close")
+		this.readyState = WebSocket.CLOSED;
 	return this._eventEl.dispatchEvent(evt);
 
-	return false;
-
 }
-//if (!window.WebSocket)
+if (!"WebSocket" in window)
 	window.WebSocket = WebSocket;
 
 
