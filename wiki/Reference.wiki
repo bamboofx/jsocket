@@ -1,5 +1,6 @@
 #summary jSocket Documentation
 #labels documentation,Phase-Implementation
+#sidebar TableOfContents
 =jSocket Object=
 
 This a reference of the basic version of jSocket, which has a basic string based featureset. 
