@@ -47,7 +47,7 @@ If you want to send other data types you should have a look at the [ReferenceAdv
 ==Events==
 
 ===jSocket.onReady()===
-Called by the socket when socket is ready for use. You generally want to call the [Reference#jSocket.connect(host,_port) jSocket.connect] within this function.
+Called by the socket when socket is ready for use. You can use [Reference#jSocket.connect(host,_port) jSocket.connect] after this has fired.
 
 ===jSocket.onConnect(success, error)===
 *success:boolean* true if connection was succesful<br/>
