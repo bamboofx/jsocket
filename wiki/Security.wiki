@@ -12,7 +12,7 @@ Flash has some pretty aggressive socket permission systems.
 All these systems take place server side and thus are not in the scope of this project.
 That said, i do provide you with an example policy file:
 
-[http://code.google.com/p/jsocket/source/browse/trunk/jSocket/flash/crossdomain.xml crossdomain.xml]
+[http://jsocket.googlecode.com/svn/trunk/jsocket/flash/crossdomain.xml crossdomain.xml]
 
 Don't forget that this leaves your server open for requests from every flash application so it should only be used in development.
 
